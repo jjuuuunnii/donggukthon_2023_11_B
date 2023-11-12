@@ -31,7 +31,9 @@ public class Barcode {
     @Enumerated(EnumType.STRING)
     private BarcodeType type;
 
-    private LocalDateTime createdAt;
+    @OneToOne(mappedBy = "barcode", fetch = FetchType.LAZY)
+    private Event event;
 
+    private LocalDateTime createdAt;
 
 }

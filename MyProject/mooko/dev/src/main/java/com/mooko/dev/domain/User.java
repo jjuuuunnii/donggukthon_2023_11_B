@@ -28,7 +28,6 @@ public class User {
     private Boolean checkStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-
     @JoinColumn(name = "user_id")
     private Event event;
 }

@@ -28,10 +28,12 @@ public class Event {
     private Boolean activeStatus;
 
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_maker_id")
     private User roomMaker;
 
-    @OneToOne(mappedBy = "barcode", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "barcode_id")
     private Barcode barcode;
 
     @OneToMany(mappedBy = "event", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
