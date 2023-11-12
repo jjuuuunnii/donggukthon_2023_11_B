@@ -32,6 +32,9 @@ public class Event {
     @JoinColumn(name = "room_maker_id")
     private User roomMaker;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "barcode_id")
+    private Barcode barcode;
 
     @OneToMany(mappedBy = "event", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<User> users = new ArrayList<>();
