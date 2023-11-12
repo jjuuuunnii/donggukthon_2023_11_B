@@ -4,6 +4,8 @@ package com.mooko.dev.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Setter
 @Getter
@@ -23,7 +25,13 @@ public class Barcode {
 
     private String title;
 
+    private String startDate;
+    private String endDate;
 
+    @Enumerated(EnumType.STRING)
+    private BarcodeType type;
+
+    private LocalDateTime createdAt;
 
 
 }
