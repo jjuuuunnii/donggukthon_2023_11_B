@@ -1,0 +1,29 @@
+package com.mooko.dev.domain;
+
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Table(name = "barcode")
+public class Barcode {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "barcode_id_seq")
+    @SequenceGenerator(name = "barcode_id_seq", sequenceName = "barcode_id_seq")
+    @Column(name = "barcode_id")
+    private Long id;
+
+    private String barcodeUrl;
+
+    private String title;
+
+
+
+
+}
