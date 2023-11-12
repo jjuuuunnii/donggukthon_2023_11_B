@@ -29,4 +29,5 @@ public class DayPhoto {
     private Day day;
 
     private LocalDateTime createdAt;
+
 }
