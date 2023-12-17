@@ -51,7 +51,7 @@ public class UserService {
         user.updateUserNickname(userNicknameDto.nickname());
     }
 
-    //2. 마이페이지(우표)
+    //2. 마이페이지(내가 만든 우표)
     public UserMyPageStampInfoDto showUserStampMyPage(User tmpUser) {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -71,8 +71,8 @@ public class UserService {
                 .build();
     }
 
-    //2-1. 마이페이지(씰)
-    public SealListDto showUserSealMyPage(User tmpUser) {
+    //2-1. 마이페이지(내가 만든 씰)
+    public UserMyPageSealInfoDto showUserSealMyPage(User tmpUser) {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         List<Seal> sealList = sealRepository.findByUser(user);
@@ -83,8 +83,12 @@ public class UserService {
                 .like(true)
                 .build()).toList();
 
-        return SealListDto.builder()
-                .sealList(sealInfoDtoList)
+        return UserMyPageSealInfoDto.builder()
+                .nickname(user.getNickname())
+                .orderCnt(user.getSealOrderCount())
+                .sealList(SealListDto.builder()
+                        .sealList(sealInfoDtoList)
+                        .build())
                 .build();
     }
 }
