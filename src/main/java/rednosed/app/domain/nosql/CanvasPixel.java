@@ -5,23 +5,21 @@ import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@Document(collation = "canvas_pixel")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Document(collection = "canvas_pixel")
 public class CanvasPixel {
 
     @Id
     private String id;
+    private List<Pixel> pixels;
+    private LocalDateTime leftTime;
 
-    private String canvasId;
-    private int xCoordinate;
-    private int yCoordinate;
-    private String color;
-
-    private String lastModifiedUserId;
-    private LocalDateTime createdAt;
+    @Builder
+    private CanvasPixel(List<Pixel> pixels, LocalDateTime leftTime) {
+        this.pixels = pixels;
+        this.leftTime = leftTime;
+    }
 }
