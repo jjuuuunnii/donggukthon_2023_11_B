@@ -52,4 +52,8 @@ public class UserController {
     ) {
         return ResponseDto.ok(userService.showUserSealMyPage(principalDetails.getUser()));
     }
+
+
+
+
 }

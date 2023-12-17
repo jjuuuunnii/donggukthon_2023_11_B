@@ -22,6 +22,7 @@ public class User {
     private String nickname;
     private String refreshToken;
     private String socialId;
+    private String sealOrderCount;
 
     // User : Canvas => Many to one
     @ManyToOne(fetch = FetchType.LAZY)
