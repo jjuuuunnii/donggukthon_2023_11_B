@@ -23,7 +23,7 @@ public class ExceptionHandlers {
     @ExceptionHandler(value = {NoHandlerFoundException.class, HttpRequestMethodNotSupportedException.class})
     public ResponseDto<?> handleNoPageFoundException(Exception e) {
         log.error("handleNoPageFoundException() in GlobalExceptionHandler throw NoHandlerFoundException : {}", e.getMessage());
-        return ResponseDto.fail(new CustomException(ErrorCode.BAD_REQUEST_JSON));
+        return ResponseDto.fail(new CustomException(ErrorCode.NOT_FOUND_END_POINT));
     }
 
     // @Validated 어노테이션을 사용하여 검증을 수행할 때 발생하는 예외
