@@ -22,7 +22,7 @@ public class User {
     private String nickname;
     private String refreshToken;
     private String socialId;
-    private String sealOrderCount;
+    private int sealOrderCount;
 
     // User : Canvas => Many to one
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,7 +33,7 @@ public class User {
 
 
     @Builder
-    private User(String userClientId, String nickname, String refreshToken, String socialId, String sealOrderCount, Canvas canvas, LocalDateTime createdAt){
+    private User(String userClientId, String nickname, String refreshToken, String socialId, int sealOrderCount, Canvas canvas, LocalDateTime createdAt){
         this.userClientId = userClientId;
         this.nickname = nickname;
         this.refreshToken = refreshToken;

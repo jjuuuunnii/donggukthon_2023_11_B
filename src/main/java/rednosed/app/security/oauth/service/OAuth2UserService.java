@@ -62,6 +62,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                 .nickname(null)
                 .refreshToken(null)
                 .socialId(kakaoUserInfo.getId())
+                .sealOrderCount(0)
                 .canvas(null)
                 .createdAt(LocalDateTime.now())
                 .build();

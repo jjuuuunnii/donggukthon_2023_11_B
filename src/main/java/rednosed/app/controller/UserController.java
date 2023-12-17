@@ -37,7 +37,7 @@ public class UserController {
         return ResponseDto.ok(null);
     }
 
-    //2. 마이페이지(우표)
+    //2. 마이페이지(내가 만든 우표)
     @GetMapping("/stamp-info")
     public ResponseDto<?> showUserStampMyPage(
             @AuthenticationPrincipal PrincipalDetails principalDetails
@@ -45,7 +45,7 @@ public class UserController {
         return ResponseDto.ok(userService.showUserStampMyPage(principalDetails.getUser()));
     }
 
-    //2-1. 마이페이지(씰)
+    //2-1. 마이페이지(내가 만든 씰)
     @GetMapping("/seal-info")
     public ResponseDto<?> showUserSealMyPage(
             @AuthenticationPrincipal PrincipalDetails principalDetails

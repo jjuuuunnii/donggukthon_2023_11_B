@@ -52,7 +52,7 @@ public class UserService {
     }
 
     //2. 마이페이지(우표)
-    public StampListDto showUserStampMyPage(User tmpUser) {
+    public UserMyPageStampInfoDto showUserStampMyPage(User tmpUser) {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         List<StampInfoDto> stampInfoDtoList = userStampRepository.findByUser(user).stream().map(userStamp
@@ -63,8 +63,11 @@ public class UserService {
                 .like(true)
                 .build()).toList();
 
-        return StampListDto.builder()
-                .stampList(stampInfoDtoList)
+        return UserMyPageStampInfoDto.builder()
+                .nickname(user.getNickname())
+                .stampList(StampListDto.builder()
+                        .stampList(stampInfoDtoList)
+                        .build())
                 .build();
     }
 

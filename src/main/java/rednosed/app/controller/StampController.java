@@ -14,6 +14,7 @@ public class StampController {
 
     private final StampService stampService;
 
-    @GetMapping("/stamp-list")
-    public ResponseDto<?> showUserSealList
+
+    @GetMapping("/like-list")
+    public ResponseDto<?> showUser
 }
