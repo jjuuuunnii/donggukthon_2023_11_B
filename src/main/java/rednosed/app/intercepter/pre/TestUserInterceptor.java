@@ -27,7 +27,6 @@ public class TestUserInterceptor implements HandlerInterceptor {
 
     private PrincipalDetails createTestPrincipalDetails(){
         return new PrincipalDetails(User.builder()
-                .id(1L)
                 .userClientId(UUID.randomUUID().toString())
                 .nickname("test")
                 .refreshToken("test")
