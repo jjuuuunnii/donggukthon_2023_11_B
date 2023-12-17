@@ -2,6 +2,7 @@ package rednosed.app.domain.rds;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,10 +10,7 @@ import java.util.List;
 
 @Entity
 @Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "canvas")
 public class Canvas {
     @Id
@@ -29,4 +27,11 @@ public class Canvas {
     private User roomMaker;
 
     private LocalDateTime createdAt;
+
+    @Builder
+    private Canvas(List<User> userList, User roomMaker, LocalDateTime createdAt) {
+        this.userList = userList;
+        this.roomMaker = roomMaker;
+        this.createdAt = createdAt;
+    }
 }
