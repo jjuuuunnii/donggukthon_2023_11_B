@@ -2,15 +2,13 @@ package rednosed.app.domain.rds;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user_stamp")
 public class UserStamp {
 
@@ -29,4 +27,13 @@ public class UserStamp {
     private Stamp stamp;
 
     private LocalDateTime createdAt;
+
+    @Builder
+    private UserStamp(User user, Stamp stamp, LocalDateTime createdAt) {
+        this.user = user;
+        this.stamp = stamp;
+        this.createdAt = createdAt;
+    }
+
+
 }
