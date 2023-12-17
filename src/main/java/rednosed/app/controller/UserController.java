@@ -26,8 +26,17 @@ public class UserController {
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestBody @Valid UserNicknameDto userNicknameDto
     ) {
-
         return ResponseDto.ok(userService.checkUserNickname(principalDetails.getUser(), userNicknameDto));
+    }
+
+    //1-2. 사용자 정보 설정(닉네임 설정)
+    @PostMapping("/more-info")
+    public ResponseDto<?> saveUserNickname(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody @Valid UserNicknameDto userNicknameDto
+    ) {
+        userService.saveUserNickname(principalDetails.getUser(), userNicknameDto);
+        return ResponseDto.ok(null);
     }
 
 

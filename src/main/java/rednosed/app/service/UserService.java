@@ -34,4 +34,13 @@ public class UserService {
                 .existedUser(isUserExist)
                 .build();
     }
+
+    //1-2. 사용자 정보 설정(닉네임 설정)
+    @Transactional
+    public void saveUserNickname(User tmpUser, UserNicknameDto userNicknameDto) {
+        User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.updateUserNickname(userNicknameDto.nickname());
+    }
 }
