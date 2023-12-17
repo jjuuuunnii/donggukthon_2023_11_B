@@ -6,11 +6,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "seals")
 public class Seal {
 
@@ -29,4 +26,11 @@ public class Seal {
     private User user;
 
     private LocalDateTime createdAt;
+
+    @Builder
+    private Seal(String sealClientId, String sealName, String sealImgUrl) {
+        this.sealClientId = sealClientId;
+        this.sealName = sealName;
+        this.sealImgUrl = sealImgUrl;
+    }
 }
