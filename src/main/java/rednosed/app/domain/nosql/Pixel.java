@@ -16,12 +16,12 @@ public class Pixel {
 
     /* canvas는 13 x 13이 default 값 */
     private String canvasId;
-    private List<List<Color>> colors;  // 이차원 리스트로 색상 관리
+    private List<List<String>> colors;  // 이차원 리스트로 색상 관리
     private String lastModifiedUserId;
     private LocalDateTime createdAt;
 
     @Builder
-    public Pixel(String canvasId, List<List<Color>> colors, String lastModifiedUserId, LocalDateTime createdAt) {
+    public Pixel(String canvasId, List<List<String>> colors, String lastModifiedUserId, LocalDateTime createdAt) {
         this.canvasId = canvasId;
         this.colors = colors;
         this.lastModifiedUserId = lastModifiedUserId;
@@ -29,11 +29,11 @@ public class Pixel {
     }
 
     // 특정 위치의 색상을 설정하는 메소드
-    public void setColor(int x, int y, Color color) {
+    public void setColor(int x, int y, String color) {
         while (colors.size() <= x) {
             colors.add(new ArrayList<>());
         }
-        List<Color> row = colors.get(x);
+        List<String> row = colors.get(x);
         while (row.size() <= y) {
             row.add(null);
         }
@@ -41,7 +41,7 @@ public class Pixel {
     }
 
     // 특정 위치의 색상을 가져오는 메소드
-    public Color getColor(int x, int y) {
+    public String getColor(int x, int y) {
         if (x < colors.size() && y < colors.get(x).size()) {
             return colors.get(x).get(y);
         }

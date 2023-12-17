@@ -3,10 +3,7 @@ package rednosed.app.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rednosed.app.dto.common.ResponseDto;
 import rednosed.app.dto.request.UserNicknameDto;
 import rednosed.app.dto.response.UserDuplicatedStatusDto;
@@ -39,5 +36,11 @@ public class UserController {
         return ResponseDto.ok(null);
     }
 
-
+    //2. 마이페이지(우표)
+    @GetMapping("/stamp-info")
+    public ResponseDto<?> showUserStampMyPage(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseDto.ok(userService.showUserStampMyPage(principalDetails.getUser()));
+    }
 }
