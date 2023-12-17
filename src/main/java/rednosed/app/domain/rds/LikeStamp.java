@@ -6,11 +6,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "like_stamp_id")
 public class LikeStamp {
 
@@ -29,4 +26,11 @@ public class LikeStamp {
     private Stamp stamp;
 
     private LocalDateTime createdAt;
+
+    @Builder
+    private LikeStamp(User user, Stamp stamp, LocalDateTime createdAt) {
+        this.user = user;
+        this.stamp = stamp;
+        this.createdAt = createdAt;
+    }
 }
