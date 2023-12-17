@@ -1,6 +1,7 @@
 package rednosed.app.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rednosed.app.domain.rds.User;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -31,10 +33,7 @@ public class UserService {
 
     //1-1. 사용자 정보 설정(닉네임 중복 확인)
     @Transactional(readOnly = true)
-    public UserDuplicatedStatusDto checkUserNickname(User tmpUser, UserNicknameDto userNicknameDto) {
-        User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
+    public UserDuplicatedStatusDto checkUserNickname(UserNicknameDto userNicknameDto) {
         boolean isUserExist = userRepository.findByNickname(userNicknameDto.nickname()).isPresent();
 
         return UserDuplicatedStatusDto.builder()

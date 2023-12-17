@@ -2,6 +2,7 @@ package rednosed.app.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import rednosed.app.dto.common.ResponseDto;
@@ -13,6 +14,7 @@ import rednosed.app.service.UserService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -20,10 +22,9 @@ public class UserController {
     //1-1. 사용자 정보 설정(닉네임 중복 확인)
     @PostMapping("/check-nickname")
     public ResponseDto<?> checkUserNickname(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestBody @Valid UserNicknameDto userNicknameDto
     ) {
-        return ResponseDto.ok(userService.checkUserNickname(principalDetails.getUser(), userNicknameDto));
+        return ResponseDto.ok(userService.checkUserNickname(userNicknameDto));
     }
 
     //1-2. 사용자 정보 설정(닉네임 설정)
