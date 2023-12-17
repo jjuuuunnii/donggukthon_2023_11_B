@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Pixel {
 
+    /* canvas는 13 x 13이 default 값 */
     private String canvasId;
     private List<List<Color>> colors;  // 이차원 리스트로 색상 관리
     private String lastModifiedUserId;
