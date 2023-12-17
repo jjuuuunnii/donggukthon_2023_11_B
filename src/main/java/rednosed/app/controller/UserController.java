@@ -44,4 +44,12 @@ public class UserController {
     ) {
         return ResponseDto.ok(userService.showUserStampMyPage(principalDetails.getUser()));
     }
+
+    //2-1. 마이페이지(씰)
+    @GetMapping("/seal-info")
+    public ResponseDto<?> showUserSealMyPage(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseDto.ok(userService.showUserSealMyPage(principalDetails.getUser()));
+    }
 }

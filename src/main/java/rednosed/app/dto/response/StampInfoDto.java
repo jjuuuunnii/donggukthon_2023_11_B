@@ -16,10 +16,10 @@ public record StampInfoDto(
         @NotNull(message = "우표의 이름은 null이 될 수 없습니다.")
         String stampName,
 
-        @Nullable
+        @NotNull(message = "우표의 좋아요 수는 null이 될 수 없습니다.")
         int likeCnt,
 
-        @Nullable
+        @NotNull(message = "우표의 좋아요 상태는 null이 될 수 없습니다.")
         boolean like
 )
 {}
