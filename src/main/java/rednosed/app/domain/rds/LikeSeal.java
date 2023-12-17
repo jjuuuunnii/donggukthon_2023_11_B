@@ -6,11 +6,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "like_seal")
 public class LikeSeal {
 
@@ -29,4 +26,11 @@ public class LikeSeal {
     private Seal seal;
 
     private LocalDateTime createdAt;
+
+    @Builder
+    private LikeSeal(User user, Seal seal, LocalDateTime createdAt) {
+        this.user = user;
+        this.seal = seal;
+        this.createdAt = createdAt;
+    }
 }

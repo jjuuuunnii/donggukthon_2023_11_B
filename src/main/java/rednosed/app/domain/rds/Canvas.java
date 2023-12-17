@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "canvas")
 public class Canvas {
