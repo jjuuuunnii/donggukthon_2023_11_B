@@ -10,4 +10,6 @@ public class Constants {
     );
 
     public static final long TOTAL_CANVAS_MAKING_TIME = 600;
+    public static final String T_STAMP = "stamp";
+    public static final String T_SEAL = "seal";
 }

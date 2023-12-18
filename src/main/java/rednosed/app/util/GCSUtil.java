@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import rednosed.app.contrant.Constants;
 import rednosed.app.dto.type.ErrorCode;
 import rednosed.app.exception.custom.CustomException;
 
@@ -39,8 +40,6 @@ public class GCSUtil {
     @Value("${spring.cloud.gcp.storage.seal-dir}")
     private String SEAL_DIR;
 
-    private final String T_SEAL = "seal";
-    private final String T_STAMP = "stamp";
 
 //    @Value("${spring.cloud.gcp.credentials.location}")
 //    private String CREDENTIALS_KEY;
@@ -52,7 +51,7 @@ public class GCSUtil {
         BlobId blobId;
         String fullPath;
 
-        if (type.equals(T_STAMP)) {
+        if (type.equals(Constants.T_STAMP)) {
             blobId = BlobId.of(BUCKET_NAME + "/" +  STAMP_DIR, objectName);
             fullPath = DIR_PATH + STAMP_DIR;
         } else {
@@ -79,10 +78,10 @@ public class GCSUtil {
         Storage storage = getStorage();
 
         Blob blob;
-        if(type.equals(T_STAMP)){
-            blob = storage.get(BUCKET_NAME + "/" + T_STAMP, objectName);
+        if(type.equals(Constants.T_STAMP)){
+            blob = storage.get(BUCKET_NAME + "/" + Constants.T_STAMP, objectName);
         } else {
-            blob = storage.get(BUCKET_NAME + "/" + T_SEAL, objectName);
+            blob = storage.get(BUCKET_NAME + "/" + Constants.T_SEAL, objectName);
         }
 
         if (blob == null) {
@@ -93,10 +92,10 @@ public class GCSUtil {
         Storage.BlobSourceOption precondition =
                 Storage.BlobSourceOption.generationMatch(blob.getGeneration());
 
-        if(type.equals(T_STAMP)){
-            storage.delete(BUCKET_NAME + "/" + T_STAMP, objectName, precondition);
+        if(type.equals(Constants.T_STAMP)){
+            storage.delete(BUCKET_NAME + "/" + Constants.T_STAMP, objectName, precondition);
         } else {
-            storage.delete(BUCKET_NAME + "/" + T_SEAL, objectName, precondition);
+            storage.delete(BUCKET_NAME + "/" + Constants.T_SEAL, objectName, precondition);
         }
     }
 

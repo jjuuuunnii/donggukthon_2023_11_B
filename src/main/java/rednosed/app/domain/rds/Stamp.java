@@ -24,9 +24,10 @@ public class Stamp {
     private LocalDateTime createdAt;
 
     @Builder
-    private Stamp(String stampClientId, String stampName, String stampImgUrl) {
+    private Stamp(String stampClientId, String stampName, String stampImgUrl, LocalDateTime createdAt) {
         this.stampClientId = stampClientId;
         this.stampName = stampName;
         this.stampImgUrl = stampImgUrl;
+        this.createdAt = createdAt;
     }
 }
