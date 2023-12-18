@@ -7,9 +7,7 @@ import rednosed.app.contrant.Constants;
 import rednosed.app.domain.rds.*;
 import rednosed.app.dto.request.LikeDto;
 import rednosed.app.dto.request.SealNewDto;
-import rednosed.app.dto.response.SealInfoDto;
-import rednosed.app.dto.response.SealLikeDataTmpDto;
-import rednosed.app.dto.response.SealListDto;
+import rednosed.app.dto.response.*;
 import rednosed.app.dto.type.ErrorCode;
 import rednosed.app.exception.custom.CustomException;
 import rednosed.app.repository.rds.LikeSealRepository;
@@ -19,6 +17,7 @@ import rednosed.app.util.GCSUtil;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -134,5 +133,32 @@ public class SealService {
                     .build();
             likeSealRepository.save(likeSeal);
         }
+    }
+
+    //2-4. 마이페이지(씰 싱글)
+    @Transactional(readOnly = true)
+    public SealSingleInfoDto showSealSingle(User user, String sealClientId) {
+        Seal seal = sealRepository.findBySealClientId(sealClientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SEAL_NOT_FOUND));
+
+        // 씰 좋아요 데이터를 가져오기 위해 LikeSealRepository 사용
+        SealLikeDataTmpDto sealLikeData = likeSealRepository
+                .findAllSealLikeDataBySealClientId(sealClientId)
+                .orElse(null);
+
+        int likeCount = sealLikeData != null ? Math.toIntExact(sealLikeData.likeCount()) : 0;
+        boolean isLiked = sealLikeData != null;
+
+        // 날짜 포맷 지정
+        String formattedDate = seal.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+
+        return SealSingleInfoDto.builder()
+                .nickname(seal.getSealName())
+                .likeCnt(likeCount)
+                .like(isLiked)
+                .date(formattedDate)
+                .maker(seal.getUser().getNickname())
+                .ImgUrl(seal.getSealImgUrl())
+                .build();
     }
 }

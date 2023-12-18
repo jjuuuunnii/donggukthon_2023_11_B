@@ -14,7 +14,6 @@ import rednosed.app.event.LoadingEvent;
 import rednosed.app.exception.custom.CustomException;
 import rednosed.app.repository.nosql.PixelRepository;
 import rednosed.app.repository.rds.*;
-import rednosed.app.security.oauth.info.PrincipalDetails;
 import rednosed.app.util.GCSUtil;
 
 import java.io.IOException;
@@ -22,8 +21,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.apache.tomcat.util.http.FastHttpDateFormat.formatDate;
 
 @Service
 @RequiredArgsConstructor
@@ -197,7 +194,7 @@ public class StampService {
     }
 
     @Transactional(readOnly = true)
-    public SingleInfoDto showStampSingle(User user, String stampClientId) {
+    public StampSingleInfoDto showStampSingle(User user, String stampClientId) {
         Stamp stamp = stampRepository.findByStampClientId(stampClientId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STAMP_NOT_FOUND));
 
@@ -212,7 +209,7 @@ public class StampService {
 
         String formattedDate = stamp.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 
-        return SingleInfoDto.builder()
+        return StampSingleInfoDto.builder()
                 .nickname(stamp.getStampName())
                 .likeCnt(likeCount)
                 .like(isLiked)

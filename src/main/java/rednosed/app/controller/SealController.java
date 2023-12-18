@@ -19,6 +19,15 @@ public class SealController {
 
     private final SealService sealService;
 
+    //2-4. 마이페이지(씰 싱글)
+    @GetMapping("/{sealClientId}/details")
+    public ResponseDto<?> showSealSingle(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable String sealClientId
+    ) {
+        return ResponseDto.ok(sealService.showSealSingle(principalDetails.getUser(), sealClientId));
+    }
+
     //2-5. 마이페이지(내가 만든 씰 목록)
     @GetMapping("/seal-list")
     public ResponseDto<?> showUserSealList(

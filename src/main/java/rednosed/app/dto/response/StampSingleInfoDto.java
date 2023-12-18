@@ -7,18 +7,18 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @Builder
-public record SingleInfoDto(
+public record StampSingleInfoDto(
 
-        @NotNull(message = "씰의 닉네임은 null이 될 수 없습니다.")
+        @NotNull(message = "우표의 닉네임은 null이 될 수 없습니다.")
         String nickname,
 
-        @NotNull(message = "씰의 좋아요 수는 null이 될 수 없습니다.")
+        @NotNull(message = "우표의 좋아요 수는 null이 될 수 없습니다.")
         int likeCnt,
 
-        @NotNull(message = "씰의 좋아요는 null이 될 수 없습니다.")
+        @NotNull(message = "우표의 좋아요는 null이 될 수 없습니다.")
         boolean like,
 
-        @NotNull(message = "씰의 닉네임은 null이 될 수 없습니다.")
+        @NotNull(message = "우표의 닉네임은 null이 될 수 없습니다.")
         String date,
 
         @Nullable
