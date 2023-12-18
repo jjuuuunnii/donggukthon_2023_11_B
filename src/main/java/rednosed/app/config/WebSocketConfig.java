@@ -1,14 +1,36 @@
 package rednosed.app.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import rednosed.app.exception.stomp.StompErrorHandler;
+import rednosed.app.intercepter.pre.StompPreHandler;
 
 @Configuration
 @EnableWebSocketMessageBroker
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final StompPreHandler stompPreHandler;
+    private final StompErrorHandler stompErrorHandler;
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws-connection")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
+
+        registry.addEndpoint("/ws-stamp")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
+        registry.setErrorHandler(stompErrorHandler);
+
+        //TODO stomp origin 바꾸기
+    }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
@@ -17,12 +39,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-connection")//처음 핸드쉐이킹
-                /**
-                 * TODO ws 설정값 바꾸기
-                 */
-                .setAllowedOrigins("http://localhost:5173")
-                .withSockJS();
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(stompPreHandler);
     }
 }
