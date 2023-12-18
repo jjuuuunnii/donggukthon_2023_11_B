@@ -22,6 +22,9 @@ public enum ErrorCode {
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다"),
     STAMP_NOT_FOUND(HttpStatus.NOT_FOUND, "우표를 찾을 수 없습니다"),
     NOT_FOUND_END_POINT(HttpStatus.NOT_FOUND,  "잘못된 엔드 포인트 입니다"),
+    CANVAS_NOT_FOUND(HttpStatus.NOT_FOUND, "캔버스를 찾을 수 없습니다"),
+    PIXEL_NOT_FOUND(HttpStatus.NOT_FOUND, "픽셀을 찾을 수 없습니다"),
+    COLOR_NOT_FOUND(HttpStatus.NOT_FOUND, "색상을 찾을 수 없습니다."),
     EXCEPT_ERROR(HttpStatus.NOT_FOUND, "발견하지 못한 에러입니다"),
 
     //500
