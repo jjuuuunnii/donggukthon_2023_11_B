@@ -28,9 +28,11 @@ public class Seal {
     private LocalDateTime createdAt;
 
     @Builder
-    private Seal(String sealClientId, String sealName, String sealImgUrl) {
+    private Seal(String sealClientId, User user, String sealName, String sealImgUrl, LocalDateTime createdAt) {
         this.sealClientId = sealClientId;
+        this.user = user;
         this.sealName = sealName;
         this.sealImgUrl = sealImgUrl;
+        this.createdAt = createdAt;
     }
 }

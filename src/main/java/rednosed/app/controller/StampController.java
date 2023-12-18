@@ -30,7 +30,7 @@ public class StampController {
     public ResponseDto<?> makeNewStamp(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @ModelAttribute StampNewDto stampNewDto
-            ) throws IOException {
+    ) throws IOException {
         stampService.makeNewStamp(principalDetails.getUser(), stampNewDto);
         return ResponseDto.ok(null);
     }
@@ -44,10 +44,20 @@ public class StampController {
     }
 
     //4. 씰 만들기(필터링: 좋아요 한 우표)
-    @GetMapping("/stamp/like-list")
+    @GetMapping("/like-list")
     public ResponseDto<?> showLikeStampList(
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
         return ResponseDto.ok(stampService.showLikeStampList(principalDetails.getUser()));
     }
+
+    //4-1. 씰 만들기(필터링: 전체우표)
+    @GetMapping("/all-list")
+    public ResponseDto<?> showStampAllList(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseDto.ok(stampService.showStampAllList(principalDetails.getUser().getUserClientId()));
+    }
+
+
 }

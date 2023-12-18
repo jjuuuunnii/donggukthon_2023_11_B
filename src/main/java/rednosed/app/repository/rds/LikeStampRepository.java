@@ -22,4 +22,12 @@ public interface LikeStampRepository extends JpaRepository<LikeStamp, Long> {
             "GROUP BY s.stampClientId, s.stampImgUrl, s.stampName")
     List<StampLikeDataTmpDto> findStampLikeDataByUserClientId(@Param("userClientId") String userClientId);
 
+    @Query("SELECT new rednosed.app.dto.response.StampLikeDataTmpDto(s.stampClientId, COUNT(ls)) " +
+            "FROM LikeStamp ls JOIN ls.stamp s " +
+            "GROUP BY s.stampClientId")
+    List<StampLikeDataTmpDto> findAllStampLikeData();
+
+    @Query("SELECT ls.stamp.stampClientId FROM LikeStamp ls WHERE ls.user.userClientId = :userClientId")
+    List<String> findLikedStampIdsByUserClientId(@Param("userClientId") String userClientId);
+
 }

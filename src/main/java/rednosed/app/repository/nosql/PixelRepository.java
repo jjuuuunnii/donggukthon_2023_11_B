@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface PixelRepository extends MongoRepository<Pixel, String> {
     Optional<Pixel> findByCanvasClientId(String canvasClientId);
+
+    void deleteAllByCanvasClientId(String canvasClientId);
 }
