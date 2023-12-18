@@ -1,12 +1,10 @@
 package rednosed.app.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import rednosed.app.dto.common.ResponseDto;
 import rednosed.app.dto.request.StampNewDto;
-import rednosed.app.dto.response.StampNameDto;
 import rednosed.app.security.oauth.info.PrincipalDetails;
 import rednosed.app.service.StampService;
 
@@ -43,5 +41,13 @@ public class StampController {
             @PathVariable String stampClientId
     ) {
         return ResponseDto.ok(stampService.showStampName(stampClientId));
+    }
+
+    //4. 씰 만들기(필터링: 좋아요 한 우표)
+    @GetMapping("/stamp/like-list")
+    public ResponseDto<?> showLikeStampList(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseDto.ok(stampService.showLikeStampList(principalDetails.getUser()));
     }
 }

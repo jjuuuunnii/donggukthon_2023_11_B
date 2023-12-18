@@ -11,6 +11,7 @@ import rednosed.app.domain.rds.User;
 import rednosed.app.domain.rds.UserStamp;
 import rednosed.app.dto.request.StampNewDto;
 import rednosed.app.dto.response.StampInfoDto;
+import rednosed.app.dto.response.StampLikeDataTmpDto;
 import rednosed.app.dto.response.StampListDto;
 import rednosed.app.dto.response.StampNameDto;
 import rednosed.app.dto.type.ErrorCode;
@@ -112,6 +113,27 @@ public class StampService {
         return StampNameDto.builder()
                 .stampName(stamp.getStampName())
                 .stampImg(stamp.getStampImgUrl())
+                .build();
+    }
+
+    public StampListDto showLikeStampList(User tmpUser) {
+        User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        List<StampLikeDataTmpDto> stampLikeDataTmpDtoList = likeStampRepository.findStampLikeDataByUserClientId(user.getUserClientId());
+
+        List<StampInfoDto> stampInfoDtoList = stampLikeDataTmpDtoList.stream()
+                .map(data -> StampInfoDto.builder()
+                        .id(data.stampId())
+                        .stampImg(data.stampImgUrl())
+                        .stampName(data.stampName())
+                        .likeCnt((int) data.likeCount())
+                        .like(true)
+                        .build())
+                .toList();
+
+        return StampListDto.builder()
+                .stampList(stampInfoDtoList)
                 .build();
     }
 }

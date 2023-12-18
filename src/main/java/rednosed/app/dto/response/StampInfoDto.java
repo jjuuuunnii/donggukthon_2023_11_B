@@ -3,8 +3,6 @@ package rednosed.app.dto.response;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
-import javax.annotation.Nullable;
-
 @Builder
 public record StampInfoDto(
         @NotNull(message = "우표는 id는 null이 될 수 없습니다.")
@@ -21,5 +19,4 @@ public record StampInfoDto(
 
         @NotNull(message = "우표의 좋아요 상태는 null이 될 수 없습니다.")
         boolean like
-)
-{}
+) {}
