@@ -9,6 +9,7 @@ import rednosed.app.domain.rds.Canvas;
 import rednosed.app.domain.rds.Seal;
 import rednosed.app.domain.rds.User;
 import rednosed.app.dto.request.UserNicknameDto;
+import rednosed.app.dto.request.UserOrderCntDto;
 import rednosed.app.dto.response.*;
 import rednosed.app.dto.type.ErrorCode;
 import rednosed.app.exception.custom.CustomException;
@@ -125,6 +126,8 @@ public class UserService {
                 .canvasId(canvasClientId)
                 .build();
     }
+
+    //3. 우표 만들기 전 공유하는 페이지(캔버스 id 돌려주기)
     @Transactional
     public String makeNewCanvas(User tmpUser) {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
@@ -141,5 +144,12 @@ public class UserService {
         return canvas.getCanvasClientId();
     }
 
-
+    //6. 주문해
+    @Transactional
+    public void updateUserOrderCount(User tmpUser, UserOrderCntDto userOrderCntDto) {
+        User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        int orderCount = userOrderCntDto.orderCnt();
+        user.updateOrderCount(++orderCount);
+    }
 }

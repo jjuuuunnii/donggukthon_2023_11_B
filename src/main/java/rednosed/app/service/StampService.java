@@ -5,28 +5,24 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rednosed.app.contrant.Constants;
-import rednosed.app.domain.rds.LikeStamp;
-import rednosed.app.domain.rds.Stamp;
-import rednosed.app.domain.rds.User;
-import rednosed.app.domain.rds.UserStamp;
+import rednosed.app.domain.rds.*;
+import rednosed.app.dto.request.LikeDto;
 import rednosed.app.dto.request.StampNewDto;
 import rednosed.app.dto.response.StampInfoDto;
+import rednosed.app.dto.response.StampLikeDataTmpDto;
 import rednosed.app.dto.response.StampListDto;
 import rednosed.app.dto.response.StampNameDto;
 import rednosed.app.dto.type.ErrorCode;
 import rednosed.app.event.LoadingEvent;
 import rednosed.app.exception.custom.CustomException;
-import rednosed.app.repository.rds.LikeStampRepository;
-import rednosed.app.repository.rds.StampRepository;
-import rednosed.app.repository.rds.UserRepository;
-import rednosed.app.repository.rds.UserStampRepository;
+import rednosed.app.repository.nosql.PixelRepository;
+import rednosed.app.repository.rds.*;
+import rednosed.app.security.oauth.info.PrincipalDetails;
 import rednosed.app.util.GCSUtil;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +34,8 @@ public class StampService {
     private final UserStampRepository userStampRepository;
     private final LikeStampRepository likeStampRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final CanvasRepository canvasRepository;
+    private final PixelRepository pixelRepository;
     private final GCSUtil gcsUtil;
 
 
@@ -85,23 +83,25 @@ public class StampService {
                 .stampImgUrl(stampFullPath)
                 .createdAt(LocalDateTime.now())
                 .build();
+        stampRepository.save(stamp);
 
         UserStamp userStamp = UserStamp.builder()
                 .user(user)
                 .stamp(stamp)
                 .createdAt(LocalDateTime.now())
                 .build();
-
-        Stamp newStamp = stampRepository.save(stamp);
         userStampRepository.save(userStamp);
-        stampRepository.flush();
-        userStampRepository.flush();
 
-        //로딩페이지를 위한 이벤트 처리
         eventPublisher.publishEvent(LoadingEvent.builder()
-                .stampId(newStamp.getStampClientId())
+                .stampId(stamp.getStampClientId())
                 .build());
+
+        canvasRepository.findByRoomMaker(user).ifPresent(canvas -> {
+            canvasRepository.delete(canvas);
+            pixelRepository.deleteAllByCanvasClientId(canvas.getCanvasClientId());
+        });
     }
+
 
     //3-6. 우표 이름, 사진 요청
     @Transactional(readOnly = true)
@@ -114,4 +114,86 @@ public class StampService {
                 .stampImg(stamp.getStampImgUrl())
                 .build();
     }
+
+    @Transactional(readOnly = true)
+    public StampListDto showLikeStampList(User tmpUser) {
+        User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        List<StampLikeDataTmpDto> stampLikeDataTmpDtoList = likeStampRepository.findStampLikeDataByUserClientId(user.getUserClientId());
+
+        List<StampInfoDto> stampInfoDtoList = stampLikeDataTmpDtoList.stream()
+                .map(data -> StampInfoDto.builder()
+                        .id(data.stampId())
+                        .stampImg(data.stampImgUrl())
+                        .stampName(data.stampName())
+                        .likeCnt((int) data.likeCount())
+                        .like(true)
+                        .build())
+                .toList();
+
+        return StampListDto.builder()
+                .stampList(stampInfoDtoList)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public StampListDto showStampAllList(User user) {
+        List<Stamp> stampList = stampRepository.findAll();
+        List<StampLikeDataTmpDto> stampLikeDataList = likeStampRepository.findAllStampLikeData();
+        List<String> likedStampIds = likeStampRepository.findLikedStampIdsByUserClientId(user.getUserClientId());
+
+        Set<String> likedStampIdsSet = new HashSet<>(likedStampIds);
+        Map<String, Long> likeCountMap = stampLikeDataList.stream()
+                .collect(Collectors.toMap(StampLikeDataTmpDto::stampId, StampLikeDataTmpDto::likeCount));
+
+        List<StampInfoDto> stampInfoDtoList = stampList.stream()
+                .map(stamp -> {
+                    String stampId = stamp.getStampClientId();
+                    long likeCount = likeCountMap.getOrDefault(stampId, 0L);
+                    boolean isLiked = likedStampIdsSet.contains(stampId);
+
+                    return StampInfoDto.builder()
+                            .id(stampId)
+                            .stampImg(stamp.getStampImgUrl())
+                            .stampName(stamp.getStampName())
+                            .likeCnt((int) likeCount)
+                            .like(isLiked)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        return StampListDto.builder()
+                .stampList(stampInfoDtoList)
+                .build();
+    }
+
+    //4-3. 우표 좋아요 누르기
+    @Transactional
+    public void putStampLike(User user, String stampClientId, LikeDto likeDto) {
+        Stamp stamp = stampRepository.findByStampClientId(stampClientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STAMP_NOT_FOUND));
+
+        Optional<LikeStamp> likeStampOptional = likeStampRepository.findByUserAndStamp(user, stamp);
+
+        if (likeDto.like()) { //유저가 좋아요를 취소함
+            if (likeStampOptional.isEmpty()) {
+                throw new CustomException(ErrorCode.LIKED_ERROR);
+            }
+            likeStampRepository.delete(likeStampOptional.get());
+
+        } else { //유저가 좋아요를 누름
+            if (likeStampOptional.isPresent()) {
+                likeStampRepository.delete(likeStampOptional.get());
+                throw new CustomException(ErrorCode.LIKED_ERROR);
+            }
+            LikeStamp likeStamp = LikeStamp.builder()
+                    .user(user)
+                    .stamp(stamp)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            likeStampRepository.save(likeStamp);
+        }
+    }
 }
+

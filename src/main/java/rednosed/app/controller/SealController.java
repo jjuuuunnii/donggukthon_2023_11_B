@@ -3,12 +3,14 @@ package rednosed.app.controller;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rednosed.app.dto.common.ResponseDto;
+import rednosed.app.dto.request.LikeDto;
+import rednosed.app.dto.request.SealNewDto;
 import rednosed.app.security.oauth.info.PrincipalDetails;
 import rednosed.app.service.SealService;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,4 +27,32 @@ public class SealController {
         return ResponseDto.ok(sealService.showUserSealList(principalDetails.getUser()));
     }
 
+    //4-2. 씰 만들기(만들기)
+    @PostMapping("/new-seal")
+    public ResponseDto<?> makeNewSeal(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @ModelAttribute SealNewDto sealNewDto
+            ) throws IOException {
+        sealService.makeNewSeal(principalDetails.getUser(), sealNewDto);
+        return ResponseDto.ok(null);
+    }
+
+    //5. 씰 게시판
+    @GetMapping("/all-list")
+    public ResponseDto<?> showSealAllList(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseDto.ok(sealService.showSealAllList(principalDetails.getUser().getUserClientId()));
+    }
+
+    //5-1. 씰 좋아요 누르기
+    @PutMapping("/{sealClientId}/like")
+    public ResponseDto<?> putSealLike(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody LikeDto likeDto,
+            @PathVariable String sealClientId
+    ) {
+        sealService.putSealLike(principalDetails.getUser(), sealClientId, likeDto);
+        return ResponseDto.ok(null);
+    }
 }

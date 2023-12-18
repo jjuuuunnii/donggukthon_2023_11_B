@@ -54,4 +54,8 @@ public class User {
     public void updateCanvas(Canvas canvas) {
         this.canvas = canvas;
     }
+
+    public void updateOrderCount(int sealOrderCount) {
+        this.sealOrderCount = sealOrderCount;
+    }
 }

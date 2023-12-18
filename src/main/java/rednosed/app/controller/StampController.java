@@ -1,12 +1,11 @@
 package rednosed.app.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import rednosed.app.dto.common.ResponseDto;
+import rednosed.app.dto.request.LikeDto;
 import rednosed.app.dto.request.StampNewDto;
-import rednosed.app.dto.response.StampNameDto;
 import rednosed.app.security.oauth.info.PrincipalDetails;
 import rednosed.app.service.StampService;
 
@@ -32,7 +31,7 @@ public class StampController {
     public ResponseDto<?> makeNewStamp(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @ModelAttribute StampNewDto stampNewDto
-            ) throws IOException {
+    ) throws IOException {
         stampService.makeNewStamp(principalDetails.getUser(), stampNewDto);
         return ResponseDto.ok(null);
     }
@@ -43,5 +42,32 @@ public class StampController {
             @PathVariable String stampClientId
     ) {
         return ResponseDto.ok(stampService.showStampName(stampClientId));
+    }
+
+    //4. 씰 만들기(필터링: 좋아요 한 우표)
+    @GetMapping("/like-list")
+    public ResponseDto<?> showLikeStampList(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseDto.ok(stampService.showLikeStampList(principalDetails.getUser()));
+    }
+
+    //4-1. 씰 만들기(필터링: 전체우표)
+    @GetMapping("/all-list")
+    public ResponseDto<?> showStampAllList(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseDto.ok(stampService.showStampAllList(principalDetails.getUser()));
+    }
+
+    //4-3. 우표 좋아요 누르기
+    @PutMapping("/{stampClientId}/like")
+    public ResponseDto<?> putStampLike(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody LikeDto likeDto,
+            @PathVariable String stampClientId
+            ) {
+        stampService.putStampLike(principalDetails.getUser(),stampClientId, likeDto);
+        return ResponseDto.ok(null);
     }
 }
