@@ -13,7 +13,7 @@ import rednosed.app.intercepter.pre.StompPreHandler;
 @Configuration
 @EnableWebSocketMessageBroker
 @RequiredArgsConstructor
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+public class StompConfig implements WebSocketMessageBrokerConfigurer {
 
     private final StompPreHandler stompPreHandler;
     private final StompErrorHandler stompErrorHandler;
