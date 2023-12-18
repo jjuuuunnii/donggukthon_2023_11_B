@@ -1,7 +1,6 @@
 package rednosed.app.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +12,7 @@ import rednosed.app.domain.rds.UserStamp;
 import rednosed.app.dto.request.StampNewDto;
 import rednosed.app.dto.response.StampInfoDto;
 import rednosed.app.dto.response.StampListDto;
+import rednosed.app.dto.response.StampNameDto;
 import rednosed.app.dto.type.ErrorCode;
 import rednosed.app.event.LoadingEvent;
 import rednosed.app.exception.custom.CustomException;
@@ -20,7 +20,6 @@ import rednosed.app.repository.rds.LikeStampRepository;
 import rednosed.app.repository.rds.StampRepository;
 import rednosed.app.repository.rds.UserRepository;
 import rednosed.app.repository.rds.UserStampRepository;
-import rednosed.app.security.oauth.info.PrincipalDetails;
 import rednosed.app.util.GCSUtil;
 
 import java.io.IOException;
@@ -102,5 +101,17 @@ public class StampService {
         eventPublisher.publishEvent(LoadingEvent.builder()
                 .stampId(newStamp.getStampClientId())
                 .build());
+    }
+
+    //3-6. 우표 이름, 사진 요청
+    @Transactional(readOnly = true)
+    public StampNameDto showStampName(String stampClientId) {
+        Stamp stamp = stampRepository.findByStampClientId(stampClientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STAMP_NOT_FOUND));
+
+        return StampNameDto.builder()
+                .stampName(stamp.getStampName())
+                .stampImg(stamp.getStampImgUrl())
+                .build();
     }
 }
