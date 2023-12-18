@@ -25,4 +25,11 @@ public interface LikeSealRepository extends JpaRepository<LikeSeal, Long> {
     List<String> findLikedSealIdsByUserClientId(@Param("userClientId") String userClientId);
 
     Optional<LikeSeal> findByUserAndSeal(User user, Seal seal);
+
+    @Query("SELECT new rednosed.app.dto.response.SealLikeDataTmpDto(s.sealClientId, s.sealImgUrl, s.sealName, COUNT(ls)) " +
+            "FROM LikeSeal ls JOIN ls.seal s " +
+            "WHERE s.sealClientId = :sealClientId " +
+            "GROUP BY s.sealClientId, s.sealImgUrl, s.sealName")
+    Optional<SealLikeDataTmpDto> findAllSealLikeDataBySealClientId(@Param("sealClientId") String sealClientId);
+
 }

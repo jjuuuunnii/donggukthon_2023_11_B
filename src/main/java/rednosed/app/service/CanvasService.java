@@ -2,6 +2,7 @@ package rednosed.app.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rednosed.app.domain.nosql.Pixel;
 import rednosed.app.domain.rds.Canvas;
 import rednosed.app.domain.rds.User;
@@ -24,6 +25,7 @@ public class CanvasService {
     private final PixelRepository pixelRepository;
 
     //3-2. 우표 만들기(캔버스 데이터 가져오기)
+    @Transactional(readOnly = true)
     public CanvasInfoDto showCanvasInfo(String canvasClientId) {
         Pixel pixel = pixelRepository.findByCanvasClientId(canvasClientId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PIXEL_NOT_FOUND));
@@ -41,7 +43,8 @@ public class CanvasService {
                 .build();
     }
 
-
+    //3-3. 방장인지 아닌지 판단
+    @Transactional(readOnly = true)
     public UserCheckRoomMakerDto checkUserRoomMaker(User tmpUser, String canvasClientId) {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));

@@ -18,6 +18,15 @@ public class StampController {
 
     private final StampService stampService;
 
+    //2-2. 마이페이지(우표 싱글)
+    @GetMapping("/{stampId}/details")
+    public ResponseDto<?> showStampSingle(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable String stampId
+    ) {
+        return ResponseDto.ok(stampService.showStampSingle(principalDetails.getUser(),stampId));
+    }
+
     //2-3. 마이페이지 (내가 만든 우표 목록)
     @GetMapping("/stamp-list")
     public ResponseDto<?> showUserStampList(

@@ -8,20 +8,17 @@ import rednosed.app.contrant.Constants;
 import rednosed.app.domain.rds.*;
 import rednosed.app.dto.request.LikeDto;
 import rednosed.app.dto.request.StampNewDto;
-import rednosed.app.dto.response.StampInfoDto;
-import rednosed.app.dto.response.StampLikeDataTmpDto;
-import rednosed.app.dto.response.StampListDto;
-import rednosed.app.dto.response.StampNameDto;
+import rednosed.app.dto.response.*;
 import rednosed.app.dto.type.ErrorCode;
 import rednosed.app.event.LoadingEvent;
 import rednosed.app.exception.custom.CustomException;
 import rednosed.app.repository.nosql.PixelRepository;
 import rednosed.app.repository.rds.*;
-import rednosed.app.security.oauth.info.PrincipalDetails;
 import rednosed.app.util.GCSUtil;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -115,6 +112,7 @@ public class StampService {
                 .build();
     }
 
+    //4. 씰 만들기(필터링: 좋아요 한 우표)
     @Transactional(readOnly = true)
     public StampListDto showLikeStampList(User tmpUser) {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
@@ -137,6 +135,7 @@ public class StampService {
                 .build();
     }
 
+    //4-1. 씰 만들기(필터링: 전체우표)
     @Transactional(readOnly = true)
     public StampListDto showStampAllList(User user) {
         List<Stamp> stampList = stampRepository.findAll();
@@ -194,6 +193,33 @@ public class StampService {
                     .build();
             likeStampRepository.save(likeStamp);
         }
+    }
+
+    //2-2. 마이페이지(우표 싱글)
+    @Transactional(readOnly = true)
+    public StampSingleInfoDto showStampSingle(User user, String stampClientId) {
+        Stamp stamp = stampRepository.findByStampClientId(stampClientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STAMP_NOT_FOUND));
+
+        StampLikeDataTmpDto stampLikeData = likeStampRepository
+                .findStampLikeDataByUserClientIdAndStampId(user.getUserClientId(), stampClientId)
+                .orElse(null);
+
+        int likeCount = stampLikeData != null ? Math.toIntExact(stampLikeData.likeCount()) : 0;
+        boolean isLiked = stampLikeData != null;
+
+        List<String> friendList = userStampRepository.findUserNicknamesByStamp(stamp);
+
+        String formattedDate = stamp.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+
+        return StampSingleInfoDto.builder()
+                .nickname(stamp.getStampName())
+                .likeCnt(likeCount)
+                .like(isLiked)
+                .date(formattedDate)
+                .friendList(friendList)
+                .ImgUrl(stamp.getStampImgUrl())
+                .build();
     }
 }
 
