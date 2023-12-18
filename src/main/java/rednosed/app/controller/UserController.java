@@ -62,4 +62,7 @@ public class UserController {
         String canvasClientId = userService.makeNewCanvas(principalDetails.getUser());
         return ResponseDto.ok(userService.startUserCanvas(canvasClientId));
     }
+
+
+
 }

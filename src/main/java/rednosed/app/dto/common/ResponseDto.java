@@ -14,11 +14,11 @@ import rednosed.app.exception.custom.CustomException;
 
 public record ResponseDto<T>(@JsonIgnore HttpStatus httpStatus,
                              @NotNull String successStatus,
-                             @Nullable T data,
+                             @Nullable T result,
                              @Nullable String message) {
 
-    public static <T> ResponseDto<T> ok(@Nullable final T data) {
-        return new ResponseDto<>(HttpStatus.OK,"SUCCESS", data, null);
+    public static <T> ResponseDto<T> ok(@Nullable final T result) {
+        return new ResponseDto<>(HttpStatus.OK,"SUCCESS", result, null);
     }
 
     public static ResponseDto<Object> fail(final NoHandlerFoundException e) {

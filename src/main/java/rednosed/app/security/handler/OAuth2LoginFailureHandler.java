@@ -24,7 +24,7 @@ public class OAuth2LoginFailureHandler implements AuthenticationFailureHandler {
 
         Map<String, Object> result = new HashMap<>();
         result.put("status", "FAILED");
-        result.put("data", null);
+        result.put("result", null);
         result.put("MESSAGE", ErrorCode.LOGIN_FAILED.getMessage());
 
         response.setContentType("application/json");

@@ -6,6 +6,7 @@ import rednosed.app.domain.nosql.Pixel;
 import rednosed.app.domain.rds.Canvas;
 import rednosed.app.domain.rds.User;
 import rednosed.app.dto.response.CanvasInfoDto;
+import rednosed.app.dto.response.UserCheckRoomMakerDto;
 import rednosed.app.dto.type.ErrorCode;
 import rednosed.app.exception.custom.CustomException;
 import rednosed.app.repository.nosql.PixelRepository;
@@ -40,4 +41,22 @@ public class CanvasService {
                 .build();
     }
 
+
+    public UserCheckRoomMakerDto checkUserRoomMaker(User tmpUser, String canvasClientId) {
+        User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Canvas canvas = canvasRepository.findByCanvasClientId(canvasClientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CANVAS_NOT_FOUND));
+
+        if (canvas.getRoomMaker().equals(user)) {
+            return UserCheckRoomMakerDto.builder()
+                    .roomMaker(true)
+                    .build();
+        }
+
+        return UserCheckRoomMakerDto.builder()
+                .roomMaker(false)
+                .build();
+    }
 }
