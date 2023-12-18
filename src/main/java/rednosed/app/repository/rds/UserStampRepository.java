@@ -1,6 +1,8 @@
 package rednosed.app.repository.rds;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import rednosed.app.domain.rds.User;
 import rednosed.app.domain.rds.UserStamp;
@@ -10,7 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface UserStampRepository extends JpaRepository<UserStamp, Long> {
-    List<UserStamp> findByUser(User user);
+    @Query("SELECT us FROM UserStamp us JOIN FETCH us.stamp WHERE us.user = :user")
+    List<UserStamp> findByUser(@Param("user") User user);
 
 
 }

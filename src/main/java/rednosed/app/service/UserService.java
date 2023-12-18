@@ -52,6 +52,7 @@ public class UserService {
     }
 
     //2. 마이페이지(내가 만든 우표)
+    @Transactional(readOnly = true)
     public UserMyPageStampInfoDto showUserStampMyPage(User tmpUser) {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -72,6 +73,7 @@ public class UserService {
     }
 
     //2-1. 마이페이지(내가 만든 씰)
+    @Transactional(readOnly = true)
     public UserMyPageSealInfoDto showUserSealMyPage(User tmpUser) {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
