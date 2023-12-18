@@ -35,4 +35,12 @@ public class SealController {
         sealService.makeNewSeal(principalDetails.getUser(), sealNewDto);
         return ResponseDto.ok(null);
     }
+
+    //5. 씰 게시판
+    @GetMapping("/all-list")
+    public ResponseDto<?> showSealAllList(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        return ResponseDto.ok(sealService.showSealAllList(principalDetails.getUser().getUserClientId()));
+    }
 }

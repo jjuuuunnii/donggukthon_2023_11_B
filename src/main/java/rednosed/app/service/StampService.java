@@ -138,10 +138,10 @@ public class StampService {
     }
 
     @Transactional(readOnly = true)
-    public StampListDto showStampAllList(String UserClientId) {
+    public StampListDto showStampAllList(User user) {
         List<Stamp> stampList = stampRepository.findAll();
         List<StampLikeDataTmpDto> stampLikeDataList = likeStampRepository.findAllStampLikeData();
-        List<String> likedStampIds = likeStampRepository.findLikedStampIdsByUserClientId(UserClientId);
+        List<String> likedStampIds = likeStampRepository.findLikedStampIdsByUserClientId(user.getUserClientId());
 
         Set<String> likedStampIdsSet = new HashSet<>(likedStampIds);
         Map<String, Long> likeCountMap = stampLikeDataList.stream()

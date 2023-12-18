@@ -57,7 +57,7 @@ public class StampController {
     public ResponseDto<?> showStampAllList(
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        return ResponseDto.ok(stampService.showStampAllList(principalDetails.getUser().getUserClientId()));
+        return ResponseDto.ok(stampService.showStampAllList(principalDetails.getUser()));
     }
 
     //4-3. 우표 좋아요 누르기

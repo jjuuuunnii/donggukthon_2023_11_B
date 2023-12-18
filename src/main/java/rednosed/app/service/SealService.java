@@ -9,6 +9,7 @@ import rednosed.app.domain.rds.Seal;
 import rednosed.app.domain.rds.User;
 import rednosed.app.dto.request.SealNewDto;
 import rednosed.app.dto.response.SealInfoDto;
+import rednosed.app.dto.response.SealLikeDataTmpDto;
 import rednosed.app.dto.response.SealListDto;
 import rednosed.app.dto.type.ErrorCode;
 import rednosed.app.exception.custom.CustomException;
@@ -19,9 +20,7 @@ import rednosed.app.util.GCSUtil;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,5 +75,37 @@ public class SealService {
                 .build();
 
         sealRepository.save(seal);
+    }
+
+    //5. 씰 게시판
+    @Transactional(readOnly = true)
+    public SealListDto showSealAllList(String userClientId) {
+        List<Seal> sealList = sealRepository.findAll();
+        List<SealLikeDataTmpDto> sealLikeDataList = likeSealRepository.findAllSealLikeData();
+        List<String> likedSealIds = likeSealRepository.findLikedSealIdsByUserClientId(userClientId);
+
+        Set<String> likedSealIdsSet = new HashSet<>(likedSealIds);
+        Map<String, Long> likeCountMap = sealLikeDataList.stream()
+                .collect(Collectors.toMap(SealLikeDataTmpDto::sealId, SealLikeDataTmpDto::likeCount));
+
+        List<SealInfoDto> sealInfoDtoList = sealList.stream()
+                .map(seal -> {
+                    String sealId = seal.getSealClientId();
+                    long likeCount = likeCountMap.getOrDefault(sealId, 0L);
+                    boolean isLiked = likedSealIdsSet.contains(sealId);
+
+                    return SealInfoDto.builder()
+                            .id(sealId)
+                            .sealImg(seal.getSealImgUrl())
+                            .sealName(seal.getSealName())
+                            .likeCnt((int) likeCount)
+                            .like(isLiked)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        return SealListDto.builder()
+                .sealList(sealInfoDtoList)
+                .build();
     }
 }
