@@ -112,6 +112,7 @@ public class StampService {
                 .build();
     }
 
+    //4. 씰 만들기(필터링: 좋아요 한 우표)
     @Transactional(readOnly = true)
     public StampListDto showLikeStampList(User tmpUser) {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
@@ -134,6 +135,7 @@ public class StampService {
                 .build();
     }
 
+    //4-1. 씰 만들기(필터링: 전체우표)
     @Transactional(readOnly = true)
     public StampListDto showStampAllList(User user) {
         List<Stamp> stampList = stampRepository.findAll();
@@ -193,6 +195,7 @@ public class StampService {
         }
     }
 
+    //2-2. 마이페이지(우표 싱글)
     @Transactional(readOnly = true)
     public StampSingleInfoDto showStampSingle(User user, String stampClientId) {
         Stamp stamp = stampRepository.findByStampClientId(stampClientId)

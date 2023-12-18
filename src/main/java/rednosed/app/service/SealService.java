@@ -59,6 +59,7 @@ public class SealService {
                 .build();
     }
 
+    //4-2. 씰 만들기(만들기)
     @Transactional
     public void makeNewSeal(User tmpUser, SealNewDto sealNewDto) throws IOException {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
@@ -141,7 +142,6 @@ public class SealService {
         Seal seal = sealRepository.findBySealClientId(sealClientId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SEAL_NOT_FOUND));
 
-        // 씰 좋아요 데이터를 가져오기 위해 LikeSealRepository 사용
         SealLikeDataTmpDto sealLikeData = likeSealRepository
                 .findAllSealLikeDataBySealClientId(sealClientId)
                 .orElse(null);
@@ -149,7 +149,6 @@ public class SealService {
         int likeCount = sealLikeData != null ? Math.toIntExact(sealLikeData.likeCount()) : 0;
         boolean isLiked = sealLikeData != null;
 
-        // 날짜 포맷 지정
         String formattedDate = seal.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 
         return SealSingleInfoDto.builder()
