@@ -8,10 +8,7 @@ import rednosed.app.contrant.Constants;
 import rednosed.app.domain.rds.*;
 import rednosed.app.dto.request.LikeDto;
 import rednosed.app.dto.request.StampNewDto;
-import rednosed.app.dto.response.StampInfoDto;
-import rednosed.app.dto.response.StampLikeDataTmpDto;
-import rednosed.app.dto.response.StampListDto;
-import rednosed.app.dto.response.StampNameDto;
+import rednosed.app.dto.response.*;
 import rednosed.app.dto.type.ErrorCode;
 import rednosed.app.event.LoadingEvent;
 import rednosed.app.exception.custom.CustomException;
@@ -22,8 +19,11 @@ import rednosed.app.util.GCSUtil;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.apache.tomcat.util.http.FastHttpDateFormat.formatDate;
 
 @Service
 @RequiredArgsConstructor
@@ -194,6 +194,32 @@ public class StampService {
                     .build();
             likeStampRepository.save(likeStamp);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public SingleInfoDto showStampSingle(User user, String stampClientId) {
+        Stamp stamp = stampRepository.findByStampClientId(stampClientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STAMP_NOT_FOUND));
+
+        StampLikeDataTmpDto stampLikeData = likeStampRepository
+                .findStampLikeDataByUserClientIdAndStampId(user.getUserClientId(), stampClientId)
+                .orElse(null);
+
+        int likeCount = stampLikeData != null ? Math.toIntExact(stampLikeData.likeCount()) : 0;
+        boolean isLiked = stampLikeData != null;
+
+        List<String> friendList = userStampRepository.findUserNicknamesByStamp(stamp);
+
+        String formattedDate = stamp.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+
+        return SingleInfoDto.builder()
+                .nickname(stamp.getStampName())
+                .likeCnt(likeCount)
+                .like(isLiked)
+                .date(formattedDate)
+                .friendList(friendList)
+                .ImgUrl(stamp.getStampImgUrl())
+                .build();
     }
 }
 
