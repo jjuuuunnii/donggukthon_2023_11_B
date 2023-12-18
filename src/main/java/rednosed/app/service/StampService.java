@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rednosed.app.contrant.Constants;
 import rednosed.app.domain.rds.*;
+import rednosed.app.dto.request.LikeDto;
 import rednosed.app.dto.request.StampNewDto;
 import rednosed.app.dto.response.StampInfoDto;
 import rednosed.app.dto.response.StampLikeDataTmpDto;
@@ -36,7 +37,6 @@ public class StampService {
     private final CanvasRepository canvasRepository;
     private final PixelRepository pixelRepository;
     private final GCSUtil gcsUtil;
-
 
 
     //2-3. 마이페이지 (내가 만든 우표 목록)
@@ -167,4 +167,34 @@ public class StampService {
                 .stampList(stampInfoDtoList)
                 .build();
     }
+
+    //4-3. 우표 좋아요 누르기
+    @Transactional
+    public void putStampLike(User user, String stampClientId, LikeDto likeDto) {
+        Stamp stamp = stampRepository.findByStampClientId(stampClientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STAMP_NOT_FOUND));
+
+        Optional<LikeStamp> likeStampOptional = likeStampRepository.findByUserAndStamp(user, stamp);
+
+        if (likeDto.like()) { //유저가 좋아요를 취소함
+            if (likeStampOptional.isEmpty()) {
+                throw new CustomException(ErrorCode.LIKED_ERROR);
+            }
+            likeStampRepository.delete(likeStampOptional.get());
+
+        } else { //유저가 좋아요를 누름
+            if (likeStampOptional.isPresent()) {
+                likeStampRepository.delete(likeStampOptional.get());
+                throw new CustomException(ErrorCode.LIKED_ERROR);
+            }
+            LikeStamp likeStamp = LikeStamp.builder()
+                    .user(user)
+                    .stamp(stamp)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            likeStampRepository.save(likeStamp);
+        }
+    }
+}
+
 }

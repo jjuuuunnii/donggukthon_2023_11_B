@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import rednosed.app.dto.common.ResponseDto;
+import rednosed.app.dto.request.LikeDto;
 import rednosed.app.dto.request.StampNewDto;
 import rednosed.app.security.oauth.info.PrincipalDetails;
 import rednosed.app.service.StampService;
@@ -59,5 +60,14 @@ public class StampController {
         return ResponseDto.ok(stampService.showStampAllList(principalDetails.getUser().getUserClientId()));
     }
 
-
+    //4-3. 우표 좋아요 누르기
+    @PutMapping("/{stampClientId}/like")
+    public ResponseDto<?> putStampLike(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody LikeDto likeDto,
+            @PathVariable String stampClientId
+            ) {
+        stampService.putStampLike(principalDetails.getUser(),stampClientId, likeDto);
+        return ResponseDto.ok(null);
+    }
 }
