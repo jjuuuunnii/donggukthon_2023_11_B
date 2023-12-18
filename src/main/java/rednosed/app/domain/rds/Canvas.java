@@ -19,6 +19,8 @@ public class Canvas {
     @Column(name = "canvas_id")
     private Long id;
 
+    private String canvasClientId;
+
     @OneToMany(mappedBy = "canvas", cascade = CascadeType.MERGE)
     private List<User> userList = new ArrayList<>();
 
@@ -29,7 +31,8 @@ public class Canvas {
     private LocalDateTime createdAt;
 
     @Builder
-    private Canvas(List<User> userList, User roomMaker, LocalDateTime createdAt) {
+    private Canvas(String canvasClientId, List<User> userList, User roomMaker, LocalDateTime createdAt) {
+        this.canvasClientId = canvasClientId;
         this.userList = userList;
         this.roomMaker = roomMaker;
         this.createdAt = createdAt;

@@ -50,4 +50,8 @@ public class User {
     public void updateUserNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public void updateCanvas(Canvas canvas) {
+        this.canvas = canvas;
+    }
 }
