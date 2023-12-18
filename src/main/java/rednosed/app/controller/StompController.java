@@ -31,4 +31,5 @@ public class StompController {
             simpMessagingTemplate.convertAndSend("/subscribe/canvas/", ResponseDto.fail(e));
         }
     }
+
 }

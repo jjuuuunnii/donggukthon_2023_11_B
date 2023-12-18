@@ -1,6 +1,7 @@
 package rednosed.app.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rednosed.app.domain.rds.LikeStamp;
@@ -28,6 +29,8 @@ public class StampService {
     private final UserRepository userRepository;
     private final UserStampRepository userStampRepository;
     private final LikeStampRepository likeStampRepository;
+    private final ApplicationEventPublisher eventPublisher;
+
 
     //2-3. 마이페이지 (내가 만든 우표 목록)
     @Transactional(readOnly = true)

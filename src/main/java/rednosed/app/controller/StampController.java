@@ -1,6 +1,7 @@
 package rednosed.app.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,6 @@ import rednosed.app.service.StampService;
 public class StampController {
 
     private final StampService stampService;
-
 
     //2-3. 마이페이지 (내가 만든 우표 목록)
     @GetMapping("/stamp-list")

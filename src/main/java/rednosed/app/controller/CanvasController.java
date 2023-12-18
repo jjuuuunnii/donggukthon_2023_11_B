@@ -35,4 +35,6 @@ public class CanvasController {
     ) {
         return ResponseDto.ok(canvasService.checkUserRoomMaker(principalDetails.getUser(), canvasClientId));
     }
+
+
 }
