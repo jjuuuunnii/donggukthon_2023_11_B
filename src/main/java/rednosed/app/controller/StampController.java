@@ -40,7 +40,7 @@ public class StampController {
     //3-6. 우표 이름, 사진 요청
     @GetMapping("/{stampClientId}/stamp-info")
     public ResponseDto<?> showStampName(
-            @PathVariable String stampClientId,
+            @PathVariable String stampClientId
     ) {
         return ResponseDto.ok(stampService.showStampName(stampClientId));
     }
