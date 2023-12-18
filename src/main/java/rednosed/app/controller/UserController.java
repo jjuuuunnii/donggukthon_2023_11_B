@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import rednosed.app.dto.common.ResponseDto;
 import rednosed.app.dto.request.UserNicknameDto;
+import rednosed.app.dto.request.UserOrderCntDto;
 import rednosed.app.dto.response.UserDuplicatedStatusDto;
 import rednosed.app.security.oauth.info.PrincipalDetails;
 import rednosed.app.service.UserService;
@@ -63,6 +64,15 @@ public class UserController {
         return ResponseDto.ok(userService.startUserCanvas(canvasClientId));
     }
 
+    //6. 주문해
+    @PostMapping("/order-count")
+    public ResponseDto<?> updateUserOrderCount(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestBody UserOrderCntDto userOrderCntDto
+            ) {
+        userService.updateUserOrderCount(principalDetails.getUser(), userOrderCntDto);
+        return ResponseDto.ok(null);
+    }
 
 
 }
