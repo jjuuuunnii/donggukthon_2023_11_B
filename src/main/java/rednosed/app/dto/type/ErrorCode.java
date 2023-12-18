@@ -25,11 +25,11 @@ public enum ErrorCode {
     CANVAS_NOT_FOUND(HttpStatus.NOT_FOUND, "캔버스를 찾을 수 없습니다"),
     PIXEL_NOT_FOUND(HttpStatus.NOT_FOUND, "픽셀을 찾을 수 없습니다"),
     COLOR_NOT_FOUND(HttpStatus.NOT_FOUND, "색상을 찾을 수 없습니다."),
+    SEAL_NOT_FOUND(HttpStatus.NOT_FOUND, "씰을 찾을 수 없습니다"),
     EXCEPT_ERROR(HttpStatus.NOT_FOUND, "발견하지 못한 에러입니다"),
 
     //500
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러입니다."),
-
     LIKED_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "좋아요 상태가 잘못되어있습니다"),
 
 

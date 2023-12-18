@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import rednosed.app.domain.rds.LikeSeal;
+import rednosed.app.domain.rds.Seal;
 import rednosed.app.domain.rds.User;
 import rednosed.app.dto.response.SealLikeDataTmpDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LikeSealRepository extends JpaRepository<LikeSeal, Long> {
@@ -21,4 +23,6 @@ public interface LikeSealRepository extends JpaRepository<LikeSeal, Long> {
 
     @Query("SELECT ls.seal.sealClientId FROM LikeSeal ls WHERE ls.user.userClientId = :userClientId")
     List<String> findLikedSealIdsByUserClientId(@Param("userClientId") String userClientId);
+
+    Optional<LikeSeal> findByUserAndSeal(User user, Seal seal);
 }
