@@ -4,8 +4,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import rednosed.app.contrant.Constants;
 
 import java.awt.Color;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,5 +45,14 @@ public class Pixel {
             return colors.get(x).get(y);
         }
         return null;
+    }
+
+    public long getLeftTime() {
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(createdAt, now);
+        long secondsPassed = duration.getSeconds();
+        long totalSeconds = Constants.TOTAL_CANVAS_MAKING_TIME; // 예시로 10분 (600초)을 설정
+
+        return totalSeconds - secondsPassed; // 남은 시간을 초 단위로 반환
     }
 }
