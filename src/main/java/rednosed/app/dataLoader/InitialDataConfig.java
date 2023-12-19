@@ -9,6 +9,7 @@ import rednosed.app.domain.rds.User;
 import rednosed.app.repository.rds.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Configuration
@@ -19,6 +20,13 @@ public class InitialDataConfig {
     @Transactional
     public CommandLineRunner initData(UserRepository userRepository) {
         return args -> {
+            Optional<User> test1ClientId = userRepository.findByUserClientId("test1ClientId");
+            Optional<User> test2ClientId = userRepository.findByUserClientId("test2ClientId");
+
+            if (test2ClientId.isPresent() && test1ClientId.isPresent()) {
+                return;
+            }
+
             User test1User = User.builder()
                     .userClientId("test1ClientId")
                     .nickname("test1")
