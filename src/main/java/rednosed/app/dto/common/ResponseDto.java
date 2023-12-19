@@ -22,23 +22,23 @@ public record ResponseDto<T>(@JsonIgnore HttpStatus httpStatus,
     }
 
     public static ResponseDto<Object> fail(final NoHandlerFoundException e) {
-        return new ResponseDto<>(HttpStatus.BAD_REQUEST,"FALSE", null, ErrorCode.NOT_FOUND_END_POINT.getMessage());
+        return new ResponseDto<>(HttpStatus.BAD_REQUEST,"FAIL", null, ErrorCode.NOT_FOUND_END_POINT.getMessage());
     }
 
     public static ResponseDto<Object> fail(final MissingServletRequestParameterException e) {
-        return new ResponseDto<>(HttpStatus.BAD_REQUEST, "FALSE", null, ErrorCode.MISSING_REQUEST_PARAMETER.getMessage());
+        return new ResponseDto<>(HttpStatus.BAD_REQUEST, "FAIL", null, ErrorCode.MISSING_REQUEST_PARAMETER.getMessage());
     }
 
     public static ResponseDto<Object> fail(final MethodArgumentTypeMismatchException e) {
-        return new ResponseDto<>(HttpStatus.BAD_REQUEST, "FALSE", null, ErrorCode.INVALID_PARAMETER_TYPE.getMessage());
+        return new ResponseDto<>(HttpStatus.BAD_REQUEST, "FAIL", null, ErrorCode.INVALID_PARAMETER_TYPE.getMessage());
     }
 
 
     public static ResponseDto<Object> fail(final MethodArgumentNotValidException e) {
-        return new ResponseDto<>(HttpStatus.BAD_REQUEST,"FALSE", null, ErrorCode.INVALID_PARAMETER_FORMAT.getMessage());
+        return new ResponseDto<>(HttpStatus.BAD_REQUEST,"FAIL", null, ErrorCode.INVALID_PARAMETER_FORMAT.getMessage());
     }
 
     public static ResponseDto<Object> fail(final CustomException e) {
-        return new ResponseDto<>(e.getErrorCode().getHttpStatus(), "FALSE", null, e.getErrorCode().getMessage());
+        return new ResponseDto<>(e.getErrorCode().getHttpStatus(), "FAIL", null, e.getErrorCode().getMessage());
     }
 }
