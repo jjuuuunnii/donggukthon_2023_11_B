@@ -43,7 +43,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'com.auth0:java-jwt:4.2.1'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-
 }
 
 
@@ -52,6 +51,14 @@ dependencyManagement {
 		mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:${springCloudGcpVersion}"
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
+}
+
+processResources.dependsOn('copySecret')
+
+tasks.register('copySecret', Copy) {
+	from './red-nose-submodule'
+	include "red-nose-project-d487e1027b27.json"
+	into 'src/main/resources'
 }
 
 tasks.named('test') {

@@ -9,11 +9,11 @@ spring:
     mongodb:
       uri: mongodb://mongo-admin:mongo-admin@mongodb:27017/redNoseDataBase
 
-
   servlet:
     multipart:
       max-file-size: 1200MB
       max-request-size: 1200MB
+
   jpa:
     hibernate:
       ddl-auto: create
