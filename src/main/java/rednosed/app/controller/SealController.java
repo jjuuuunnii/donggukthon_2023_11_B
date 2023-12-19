@@ -22,10 +22,9 @@ public class SealController {
     //2-4. 마이페이지(씰 싱글)
     @GetMapping("/{sealClientId}/details")
     public ResponseDto<?> showSealSingle(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable String sealClientId
     ) {
-        return ResponseDto.ok(sealService.showSealSingle(principalDetails.getUser(), sealClientId));
+        return ResponseDto.ok(sealService.showSealSingle(sealClientId));
     }
 
     //2-5. 마이페이지(내가 만든 씰 목록)
@@ -43,6 +42,14 @@ public class SealController {
             @ModelAttribute SealNewDto sealNewDto
             ) throws IOException {
         return ResponseDto.ok(sealService.makeNewSeal(principalDetails.getUser(), sealNewDto));
+    }
+
+    //4-4. 씰 이름, 사진 요청
+    @GetMapping("/{sealClientId}/seal-info")
+    public ResponseDto<?> showNewSealInfo(
+            @PathVariable String sealClientId
+    ) {
+        return ResponseDto.ok(sealService.showNewSealInfo(sealClientId));
     }
 
     //5. 씰 게시판

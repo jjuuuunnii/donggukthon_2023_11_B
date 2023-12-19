@@ -143,7 +143,7 @@ public class SealService {
 
     //2-4. 마이페이지(씰 싱글)
     @Transactional(readOnly = true)
-    public SealSingleInfoDto showSealSingle(User user, String sealClientId) {
+    public SealSingleInfoDto showSealSingle(String sealClientId) {
         Seal seal = sealRepository.findBySealClientId(sealClientId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SEAL_NOT_FOUND));
 
@@ -163,6 +163,17 @@ public class SealService {
                 .date(formattedDate)
                 .maker(seal.getUser().getNickname())
                 .ImgUrl(seal.getSealImgUrl())
+                .build();
+    }
+
+    //4-4. 씰 이름, 사진 요청
+    public SealNewInfoDto showNewSealInfo(String sealClientId) {
+        Seal seal = sealRepository.findBySealClientId(sealClientId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SEAL_NOT_FOUND));
+
+        return SealNewInfoDto.builder()
+                .sealName(seal.getSealName())
+                .sealImg(seal.getSealImgUrl())
                 .build();
     }
 }

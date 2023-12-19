@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record StampNameDto(
+public record StampNewInfoDto(
 
         @NotNull(message = "우표이름은 null이 될 수 없습니다.")
         String stampName,

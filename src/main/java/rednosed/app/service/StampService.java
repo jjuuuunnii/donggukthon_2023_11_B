@@ -107,11 +107,11 @@ public class StampService {
 
     //3-6. 우표 이름, 사진 요청
     @Transactional(readOnly = true)
-    public StampNameDto showStampName(String stampClientId) {
+    public StampNewInfoDto showNewStampInfo(String stampClientId) {
         Stamp stamp = stampRepository.findByStampClientId(stampClientId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STAMP_NOT_FOUND));
 
-        return StampNameDto.builder()
+        return StampNewInfoDto.builder()
                 .stampName(stamp.getStampName())
                 .stampImg(stamp.getStampImgUrl())
                 .build();
