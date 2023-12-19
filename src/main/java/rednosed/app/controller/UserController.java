@@ -54,7 +54,6 @@ public class UserController {
         return ResponseDto.ok(userService.showUserSealMyPage(principalDetails.getUser()));
     }
 
-
     //3-1. 우표 만들기 전 공유하는 페이지(캔버스 id 돌려주기)
     @GetMapping("/make-canvas")
     public ResponseDto<?> startUserCanvas(
