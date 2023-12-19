@@ -12,11 +12,8 @@ import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import rednosed.app.contrant.Constants;
 import rednosed.app.converter.MultipartFileToFileConverter;
-import rednosed.app.intercepter.pre.TestUserInterceptor;
 
 
 @Configuration
@@ -53,10 +50,10 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
 
-    @Override
-    public void addInterceptors(final InterceptorRegistry registry) {
-        registry.addInterceptor(new TestUserInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns(Constants.NO_NEED_AUTH_URLS);
-    }
+//    @Override
+//    public void addInterceptors(final InterceptorRegistry registry) {
+//        registry.addInterceptor(new TestUserInterceptor())
+//                .addPathPatterns("/**")
+//                .excludePathPatterns(Constants.NO_NEED_AUTH_URLS);
+//    }
 }

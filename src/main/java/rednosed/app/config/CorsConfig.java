@@ -14,12 +14,13 @@ public class CorsConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:5173");
+        configuration.addAllowedOrigin("*");
         configuration.addAllowedMethod("GET");
         configuration.addAllowedMethod("POST");
         configuration.addAllowedMethod("DELETE");
         configuration.addAllowedMethod("PUT");
         configuration.addAllowedMethod("HEAD");
+        configuration.addAllowedMethod("OPTION");
         configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("authorization");
