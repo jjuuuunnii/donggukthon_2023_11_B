@@ -64,6 +64,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         response.addCookie(accessCookie);
         response.addCookie(refreshCookie);
 
-        response.sendRedirect("https://red-nosed.com/mypage");
+        response.sendRedirect("http://localhost:3000/mypage");
     }
 }
