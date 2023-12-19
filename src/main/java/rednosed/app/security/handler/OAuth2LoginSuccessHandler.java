@@ -64,6 +64,11 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         response.addCookie(accessCookie);
         response.addCookie(refreshCookie);
 
-        response.sendRedirect("http://localhost:3000/mypage");
+        if (user.getRole().equals("GUEST")) {
+            response.sendRedirect("http://localhost:3000/signin");
+        } else {
+            response.sendRedirect("http://localhost:3000/mypage");
+        }
+
     }
 }

@@ -2,7 +2,6 @@ package rednosed.app.domain.rds;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +22,7 @@ public class User {
     private String refreshToken;
     private String socialId;
     private int sealOrderCount;
+    private String role;
 
     // User : Canvas => Many to one
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,12 +33,13 @@ public class User {
 
 
     @Builder
-    private User(String userClientId, String nickname, String refreshToken, String socialId, int sealOrderCount, Canvas canvas, LocalDateTime createdAt){
+    private User(String userClientId, String nickname, String refreshToken, String socialId, int sealOrderCount, String role, Canvas canvas, LocalDateTime createdAt){
         this.userClientId = userClientId;
         this.nickname = nickname;
         this.refreshToken = refreshToken;
         this.socialId = socialId;
         this.sealOrderCount = sealOrderCount;
+        this.role = role;
         this.canvas = canvas;
         this.createdAt = createdAt;
     }
@@ -47,8 +48,9 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
-    public void updateUserNickname(String nickname) {
+    public void updateUserNicknameAndRole(String nickname, String role) {
         this.nickname = nickname;
+        this.role = role;
     }
 
     public void updateCanvas(Canvas canvas) {

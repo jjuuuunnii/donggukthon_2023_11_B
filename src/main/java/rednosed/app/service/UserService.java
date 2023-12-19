@@ -59,7 +59,7 @@ public class UserService {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        user.updateUserNickname(userNicknameDto.nickname());
+        user.updateUserNicknameAndRole(userNicknameDto.nickname(), "USER");
     }
 
     //2. 마이페이지(내가 만든 우표)
