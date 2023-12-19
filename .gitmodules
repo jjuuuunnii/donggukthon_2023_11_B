@@ -1,3 +1,3 @@
 [submodule "red-nose-submodule"]
 	path = red-nose-submodule
-	url = https://github.com/jjuuuunnii/red-nose-submodule.git
+	url = git@github.com:jjuuuunnii/red-nose-submodule.git
