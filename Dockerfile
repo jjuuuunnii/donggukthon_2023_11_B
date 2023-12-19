@@ -5,5 +5,5 @@ RUN gradle wrapper --gradle-version 8.5
 RUN ./gradlew clean build -x test
 
 FROM openjdk:17-jdk-alpine
-COPY --from=builder /usr/src/build/libs/dev-0.0.1-SNAPSHOT.jar /usr/app/app.jar
+COPY --from=builder /usr/src/build/libs/app-0.0.1-SNAPSHOT.jar /usr/app/app.jar
 ENTRYPOINT ["java", "-jar", "/usr/app/app.jar"]
