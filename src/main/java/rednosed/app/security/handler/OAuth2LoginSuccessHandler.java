@@ -20,6 +20,8 @@ import rednosed.app.security.oauth.info.CustomOAuth2user;
 import rednosed.app.security.oauth.info.PrincipalDetails;
 import rednosed.app.security.util.JwtUtil;
 
+import java.io.IOException;
+
 
 @Component
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         log.info("로그인 성공 토큰 세팅에 들어갑니다");
 
         CustomOAuth2user customOAuth2user = (CustomOAuth2user) authentication.getPrincipal();
@@ -56,14 +58,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         accessCookie.setPath("/");
         refreshCookie.setPath("/");
 
-//        refreshCookie.setSecure(true);
-//        refreshCookie.setHttpOnly(true);
+        refreshCookie.setSecure(true);
+        refreshCookie.setHttpOnly(true);
 
         response.addCookie(accessCookie);
         response.addCookie(refreshCookie);
 
-//        response.sendRedirect("http://localhost:5173/substart");
-
-
+        response.sendRedirect("http://localhost:3000/mypage");
     }
 }

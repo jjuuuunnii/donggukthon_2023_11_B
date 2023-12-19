@@ -28,8 +28,6 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
         registry.setErrorHandler(stompErrorHandler);
-
-        //TODO stomp origin 바꾸기
     }
 
     @Override

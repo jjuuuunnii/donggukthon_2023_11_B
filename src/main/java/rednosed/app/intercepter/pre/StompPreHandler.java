@@ -41,13 +41,13 @@ public class StompPreHandler implements ChannelInterceptor {
             StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
             /** TODO 테스트 데이터 지우기 **/
-            if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-                PrincipalDetails testPrincipal = createTestPrincipalDetails();
-                Authentication testAuthentication = new UsernamePasswordAuthenticationToken(
-                        testPrincipal, null, testPrincipal.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(testAuthentication);
-                return message;
-            }
+//            if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+//                PrincipalDetails testPrincipal = createTestPrincipalDetails();
+//                Authentication testAuthentication = new UsernamePasswordAuthenticationToken(
+//                        testPrincipal, null, testPrincipal.getAuthorities());
+//                SecurityContextHolder.getContext().setAuthentication(testAuthentication);
+//                return message;
+//            }
 
             if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
                 List<String> authorizationHeaders = accessor.getNativeHeader("Authorization");
@@ -96,14 +96,14 @@ public class StompPreHandler implements ChannelInterceptor {
      * @return
      */
     /* 테스트를 위한 데이터 */
-    private PrincipalDetails createTestPrincipalDetails() {
-        return new PrincipalDetails(User.builder()
-                .userClientId("testClientId")
-                .nickname("test")
-                .refreshToken("test")
-                .socialId("testId")
-                .canvas(null)
-                .createdAt(LocalDateTime.now())
-                .build());
-    }
+//    private PrincipalDetails createTestPrincipalDetails() {
+//        return new PrincipalDetails(User.builder()
+//                .userClientId("testClientId")
+//                .nickname("test")
+//                .refreshToken("test")
+//                .socialId("testId")
+//                .canvas(null)
+//                .createdAt(LocalDateTime.now())
+//                .build());
+//    }
 }
