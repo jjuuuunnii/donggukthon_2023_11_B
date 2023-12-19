@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -31,7 +32,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
 //            log.error("FilterException throw SecurityException Exception : {}", e.getMessage());
 //            request.setAttribute("exception", ErrorCode.ACCESS_DENIED);
 //            filterChain.doFilter(request, response);
-        } catch (MalformedJwtException e) {
+        } catch (MalformedJwtException | InsufficientAuthenticationException e) {
             log.error("FilterException throw MalformedJwtException Exception : {}", e.getMessage());
             request.setAttribute("exception", ErrorCode.TOKEN_MALFORMED_ERROR);
             filterChain.doFilter(request, response);
