@@ -34,15 +34,8 @@ public class GCSUtil {
     @Value("${spring.cloud.gcp.storage.bucket-dir-path}")
     private String DIR_PATH;
 
-    @Value("${spring.cloud.gcp.storage.stamp-dir}")
-    private String STAMP_DIR;
-
-    @Value("${spring.cloud.gcp.storage.seal-dir}")
-    private String SEAL_DIR;
-
-
-//    @Value("${spring.cloud.gcp.credentials.location}")
-//    private String CREDENTIALS_KEY;
+    @Value("${spring.cloud.gcp.credentials.location}")
+    private String CREDENTIALS_KEY;
 
 
     public String saveFileImageToGCS(File image, String type) throws IOException {
@@ -97,7 +90,7 @@ public class GCSUtil {
     }
 
     private Storage getStorage() throws IOException {
-        ClassPathResource resource = new ClassPathResource("red-nose-project-d487e1027b27.json");
+        ClassPathResource resource = new ClassPathResource(CREDENTIALS_KEY);
         GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream());
         return StorageOptions.newBuilder().setProjectId(PROJECT_ID).setCredentials(credentials).build().getService();
     }
