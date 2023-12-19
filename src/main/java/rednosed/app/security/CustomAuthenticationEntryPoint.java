@@ -27,10 +27,12 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         ResponseDto responseDto;
 
         if (authException.getCause() instanceof TokenExpiredException || authException.getCause() instanceof SignatureVerificationException) {
+            log.info("11111");
             responseDto = new ResponseDto(HttpStatus.BAD_REQUEST, "FAIL", null, ErrorCode.INVALID_TOKEN.getMessage());
         }
         // 헤더에 토큰이 없는 경우 처리
         else if (authException instanceof BadCredentialsException && authException.getCause() == null) {
+            log.info("222222");
             responseDto = new ResponseDto(HttpStatus.UNAUTHORIZED, "FAIL", null, ErrorCode.UNAUTHORIZED_USER.getMessage());
         }
         // UsernameNotFoundException 처리
@@ -46,7 +48,9 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+        response.setStatus(responseDto.httpStatus().value());
         response.getWriter().write(JSONValue.toJSONString(responseDto));
+        log.error("response = {}", responseDto);
         log.error("error = {}", (Object) authException.getStackTrace());
     }
 }
