@@ -115,29 +115,33 @@ public class SealService {
 
     //5-1. 씰 좋아요 누르기
     @Transactional
-    public void putSealLike(User user, String sealClientId, LikeDto likeDto) {
+    public void putSealLike(User tmpUser, String sealClientId, LikeDto likeDto) {
+
         Seal seal = sealRepository.findBySealClientId(sealClientId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SEAL_NOT_FOUND));
+        User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Optional<LikeSeal> likeSealOptional = likeSealRepository.findByUserAndSeal(user, seal);
 
-        if (likeDto.like()) { //유저가 좋아요를 취소함
-            if (likeSealOptional.isEmpty()) {
-                throw new CustomException(ErrorCode.LIKED_ERROR);
-            }
-            likeSealRepository.delete(likeSealOptional.get());
-
-        } else { //유저가 좋아요를 누름
+        if (likeDto.like()) { //유저가 좋아요를 누름
             if (likeSealOptional.isPresent()) {
                 likeSealRepository.delete(likeSealOptional.get());
                 throw new CustomException(ErrorCode.LIKED_ERROR);
             }
+
             LikeSeal likeSeal = LikeSeal.builder()
                     .user(user)
                     .seal(seal)
                     .createdAt(LocalDateTime.now())
                     .build();
             likeSealRepository.save(likeSeal);
+
+        } else { //유저가 좋아요를 누름
+            if (likeSealOptional.isEmpty()) {
+                throw new CustomException(ErrorCode.LIKED_ERROR);
+            }
+            likeSealRepository.delete(likeSealOptional.get());
         }
     }
 

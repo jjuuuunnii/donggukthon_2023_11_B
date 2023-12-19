@@ -95,6 +95,11 @@ public class StampService {
                 .build());
 
         canvasRepository.findByRoomMaker(user).ifPresent(canvas -> {
+            for (User canvasUser : canvas.getUserList()) {
+                canvasUser.updateCanvas(null);
+                userRepository.save(canvasUser);
+            }
+            userRepository.flush();
             canvasRepository.delete(canvas);
             pixelRepository.deleteAllByCanvasClientId(canvas.getCanvasClientId());
         });
@@ -184,22 +189,23 @@ public class StampService {
         Optional<LikeStamp> likeStampOptional = likeStampRepository.findByUserAndStamp(user, stamp);
 
         if (likeDto.like()) { //유저가 좋아요를 취소함
-            if (likeStampOptional.isEmpty()) {
-                throw new CustomException(ErrorCode.LIKED_ERROR);
-            }
-            likeStampRepository.delete(likeStampOptional.get());
-
-        } else { //유저가 좋아요를 누름
             if (likeStampOptional.isPresent()) {
                 likeStampRepository.delete(likeStampOptional.get());
                 throw new CustomException(ErrorCode.LIKED_ERROR);
             }
+
             LikeStamp likeStamp = LikeStamp.builder()
                     .user(user)
                     .stamp(stamp)
                     .createdAt(LocalDateTime.now())
                     .build();
             likeStampRepository.save(likeStamp);
+
+        } else { //유저가 좋아요를 누름
+            if (likeStampOptional.isEmpty()) {
+                throw new CustomException(ErrorCode.LIKED_ERROR);
+            }
+            likeStampRepository.delete(likeStampOptional.get());
         }
     }
 
