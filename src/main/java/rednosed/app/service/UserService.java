@@ -150,6 +150,6 @@ public class UserService {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         int orderCount = userOrderCntDto.orderCnt();
-        user.updateOrderCount(++orderCount);
+        user.updateOrderCount(orderCount);
     }
 }
