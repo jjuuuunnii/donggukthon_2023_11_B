@@ -61,7 +61,7 @@ public class SealService {
 
     //4-2. 씰 만들기(만들기)
     @Transactional
-    public void makeNewSeal(User tmpUser, SealNewDto sealNewDto) throws IOException {
+    public SealIdDto makeNewSeal(User tmpUser, SealNewDto sealNewDto) throws IOException {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         String sealFullPath = gcsUtil.saveFileImageToGCS(sealNewDto.seal(), Constants.T_SEAL);
@@ -74,6 +74,11 @@ public class SealService {
                 .build();
 
         sealRepository.save(seal);
+        sealRepository.flush();
+
+        return SealIdDto.builder()
+                .sealId(seal.getSealClientId())
+                .build();
     }
 
     //5. 씰 게시판

@@ -42,8 +42,7 @@ public class SealController {
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @ModelAttribute SealNewDto sealNewDto
             ) throws IOException {
-        sealService.makeNewSeal(principalDetails.getUser(), sealNewDto);
-        return ResponseDto.ok(null);
+        return ResponseDto.ok(sealService.makeNewSeal(principalDetails.getUser(), sealNewDto));
     }
 
     //5. 씰 게시판

@@ -46,19 +46,17 @@ public class GCSUtil {
 
 
     public String saveFileImageToGCS(File image, String type) throws IOException {
-        String objectName = UUID.randomUUID() + ".jpg";
         Storage storage = getStorage();
-        BlobId blobId;
-        String fullPath;
+        String objectName;
 
         if (type.equals(Constants.T_STAMP)) {
-            blobId = BlobId.of(BUCKET_NAME + "/" +  STAMP_DIR, objectName);
-            fullPath = DIR_PATH + STAMP_DIR;
+            objectName = UUID.randomUUID() + "_STAMP" + ".jpg";
         } else {
-            blobId = BlobId.of(BUCKET_NAME + "/" + SEAL_DIR, objectName);
-            fullPath = DIR_PATH + SEAL_DIR;
-
+            objectName = UUID.randomUUID() + "_SEAL" + ".jpg";
         }
+
+        BlobId blobId = BlobId.of(BUCKET_NAME, objectName);
+        String fullPath = DIR_PATH + objectName;
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
 
         try (WriteChannel writer = storage.writer(blobInfo);
@@ -78,11 +76,7 @@ public class GCSUtil {
         Storage storage = getStorage();
 
         Blob blob;
-        if(type.equals(Constants.T_STAMP)){
-            blob = storage.get(BUCKET_NAME + "/" + Constants.T_STAMP, objectName);
-        } else {
-            blob = storage.get(BUCKET_NAME + "/" + Constants.T_SEAL, objectName);
-        }
+        blob = storage.get(BUCKET_NAME, objectName);
 
         if (blob == null) {
             log.info("The object " + objectName + " wasn't found in " + BUCKET_NAME);
@@ -92,11 +86,8 @@ public class GCSUtil {
         Storage.BlobSourceOption precondition =
                 Storage.BlobSourceOption.generationMatch(blob.getGeneration());
 
-        if(type.equals(Constants.T_STAMP)){
-            storage.delete(BUCKET_NAME + "/" + Constants.T_STAMP, objectName, precondition);
-        } else {
-            storage.delete(BUCKET_NAME + "/" + Constants.T_SEAL, objectName, precondition);
-        }
+
+        storage.delete(BUCKET_NAME, objectName, precondition);
     }
 
     public String extractFileName(String url) throws URISyntaxException {
@@ -106,7 +97,7 @@ public class GCSUtil {
     }
 
     private Storage getStorage() throws IOException {
-        ClassPathResource resource = new ClassPathResource("striped-bonfire-405812-4dfb61d784ed.json");
+        ClassPathResource resource = new ClassPathResource("red-nose-project-d487e1027b27.json");
         GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream());
         return StorageOptions.newBuilder().setProjectId(PROJECT_ID).setCredentials(credentials).build().getService();
     }

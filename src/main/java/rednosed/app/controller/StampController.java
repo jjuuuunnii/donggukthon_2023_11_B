@@ -41,8 +41,7 @@ public class StampController {
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @ModelAttribute StampNewDto stampNewDto
     ) throws IOException {
-        stampService.makeNewStamp(principalDetails.getUser(), stampNewDto);
-        return ResponseDto.ok(null);
+        return ResponseDto.ok(stampService.makeNewStamp(principalDetails.getUser(), stampNewDto));
     }
 
     //3-6. 우표 이름, 사진 요청

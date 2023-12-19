@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "like_stamp_id")
+@Table(name = "like_stamp")
 public class LikeStamp {
 
     @Id
