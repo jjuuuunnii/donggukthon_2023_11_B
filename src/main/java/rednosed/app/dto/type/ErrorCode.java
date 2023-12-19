@@ -8,6 +8,7 @@ public enum ErrorCode {
 
     //400
     LOGIN_FAILED(HttpStatus.BAD_REQUEST, "로그인에 실패했습니다."),
+    TOKEN_TYPE_ERROR(HttpStatus.UNAUTHORIZED, "토큰 타입이 일치하지 않거나 비어있습니다."),
 
     //401
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "잘못된 토큰입니다."),
@@ -16,6 +17,13 @@ public enum ErrorCode {
     MISSING_REQUEST_PARAMETER(HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락 되었습니다."),
     INVALID_PARAMETER_TYPE(HttpStatus.BAD_REQUEST, "파라미터의 타입이 잘못되었습니다."),
     BAD_REQUEST_JSON(HttpStatus.BAD_REQUEST, "잘못된 JSON 형식입니다."),
+    EXPIRED_TOKEN_ERROR(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
+    INVALID_TOKEN_ERROR( HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    TOKEN_MALFORMED_ERROR(HttpStatus.UNAUTHORIZED, "토큰이 올바르지 않습니다."),
+    TOKEN_UNSUPPORTED_ERROR(HttpStatus.UNAUTHORIZED, "지원하지않는 토큰입니다."),
+    TOKEN_GENERATION_ERROR(HttpStatus.UNAUTHORIZED, "토큰 생성에 실패하였습니다."),
+    TOKEN_UNKNOWN_ERROR(HttpStatus.UNAUTHORIZED, "알 수 없는 토큰입니다."),
+
 
     //404
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을수 없습니다."),

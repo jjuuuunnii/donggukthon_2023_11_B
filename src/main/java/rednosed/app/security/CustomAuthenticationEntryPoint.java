@@ -44,7 +44,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             setResponseMap(result, "FAIL", null, errorCode.getMessage());
             status = HttpStatus.BAD_REQUEST;
         }
-
         sendResponse(response, result, status);
         log.error("Authentication error: {}", authException.getMessage(), authException);
     }

@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.filter.CorsFilter;
 import rednosed.app.security.CustomAuthenticationEntryPoint;
+import rednosed.app.security.filter.JwtExceptionFilter;
 import rednosed.app.security.filter.JwtFilter;
 import rednosed.app.security.handler.OAuth2LoginFailureHandler;
 import rednosed.app.security.handler.OAuth2LoginSuccessHandler;
@@ -29,6 +30,7 @@ public class SecurityConfig {
     private final OAuth2UserService oAuth2UserService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final JwtFilter jwtFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
 
     @Bean
@@ -36,8 +38,7 @@ public class SecurityConfig {
 
 
         http
-                .addFilter(corsFilter)
-                .addFilterBefore(jwtFilter, LogoutFilter.class);
+                .addFilter(corsFilter);
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -63,6 +64,12 @@ public class SecurityConfig {
 
         http
                 .exceptionHandling(config -> config.authenticationEntryPoint(customAuthenticationEntryPoint));
+
+        http
+                .addFilterBefore(jwtFilter, LogoutFilter.class)
+                .addFilterBefore(jwtExceptionFilter, JwtFilter.class);
+
+
 
         return http.build();
     }
