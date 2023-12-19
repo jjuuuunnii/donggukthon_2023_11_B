@@ -1,7 +1,7 @@
-FROM gradle:8.4.0-jdk17-alpine AS builder
+FROM gradle:8.5.0-jdk17-alpine AS builder
 COPY . /usr/src
 WORKDIR /usr/src
-RUN gradle wrapper --gradle-version 8.4
+RUN gradle wrapper --gradle-version 8.5
 RUN ./gradlew clean build -x test
 
 FROM openjdk:17-jdk-alpine
