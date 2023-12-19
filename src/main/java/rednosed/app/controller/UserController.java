@@ -55,7 +55,7 @@ public class UserController {
     }
 
 
-    //3. 우표 만들기 전 공유하는 페이지(캔버스 id 돌려주기)
+    //3-1. 우표 만들기 전 공유하는 페이지(캔버스 id 돌려주기)
     @GetMapping("/make-canvas")
     public ResponseDto<?> startUserCanvas(
             @AuthenticationPrincipal PrincipalDetails principalDetails)

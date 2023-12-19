@@ -111,7 +111,7 @@ public class UserService {
         List<List<String>> colorMatrix = new ArrayList<>();
         for (int i = 0; i < 13; i++) {
             for (int j = 0; j < 13; j++) {
-                List<String> colorRow = new ArrayList<>(Collections.nCopies(13, "white"));
+                List<String> colorRow = new ArrayList<>(Collections.nCopies(13, "#FFFFFF"));
                 colorMatrix.add(colorRow);
             }
         }
