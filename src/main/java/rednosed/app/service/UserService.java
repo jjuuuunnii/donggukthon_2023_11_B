@@ -18,6 +18,7 @@ import rednosed.app.repository.rds.CanvasRepository;
 import rednosed.app.repository.rds.SealRepository;
 import rednosed.app.repository.rds.UserRepository;
 import rednosed.app.repository.rds.UserStampRepository;
+import rednosed.app.security.util.JwtUtil;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class UserService {
     private final SealRepository sealRepository;
     private final CanvasRepository canvasRepository;
     private final PixelRepository pixelRepository;
+    private final JwtUtil jwtUtil;
 
 
     @Transactional
@@ -151,5 +153,12 @@ public class UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         int orderCount = userOrderCntDto.orderCnt();
         user.updateOrderCount(orderCount);
+    }
+
+    public TestUsersAccessData findTestUser() {
+        return TestUsersAccessData.builder()
+                .test1AccessToken(jwtUtil.createAccessToken("test1ClientId"))
+                .test2AccessToken(jwtUtil.createAccessToken("test2ClientId"))
+                .build();
     }
 }

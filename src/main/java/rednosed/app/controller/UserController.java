@@ -74,4 +74,9 @@ public class UserController {
     }
 
 
+    @GetMapping("/test-data")
+    public ResponseDto<?> getTestUserAccessToken() {
+        return ResponseDto.ok(userService.findTestUser());
+    }
+
 }
