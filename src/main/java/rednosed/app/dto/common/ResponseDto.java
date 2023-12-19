@@ -13,7 +13,7 @@ import rednosed.app.exception.custom.CustomException;
 
 
 public record ResponseDto<T>(@JsonIgnore HttpStatus httpStatus,
-                             @NotNull String success,
+                             @NotNull String status,
                              @Nullable T result,
                              @Nullable String message) {
 

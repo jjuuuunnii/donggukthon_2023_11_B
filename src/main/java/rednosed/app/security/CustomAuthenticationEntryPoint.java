@@ -17,6 +17,8 @@ import rednosed.app.dto.type.ErrorCode;
 
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -24,33 +26,40 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        ResponseDto responseDto;
+        Map<String, Object> result = new HashMap<>();
+        HttpStatus status;
 
         if (authException.getCause() instanceof TokenExpiredException || authException.getCause() instanceof SignatureVerificationException) {
-            log.info("11111");
-            responseDto = new ResponseDto(HttpStatus.BAD_REQUEST, "FAIL", null, ErrorCode.INVALID_TOKEN.getMessage());
-        }
-        // 헤더에 토큰이 없는 경우 처리
-        else if (authException instanceof BadCredentialsException && authException.getCause() == null) {
-            log.info("222222");
-            responseDto = new ResponseDto(HttpStatus.UNAUTHORIZED, "FAIL", null, ErrorCode.UNAUTHORIZED_USER.getMessage());
-        }
-        // UsernameNotFoundException 처리
-        else if (authException.getCause() instanceof UsernameNotFoundException) {
-            responseDto = new ResponseDto(HttpStatus.BAD_REQUEST, "FAIL", null, ErrorCode.USER_NOT_FOUND.getMessage());
-        }
-        // 기타 예외 처리
-        else {
+            setResponseMap(result, "FAIL", null, ErrorCode.INVALID_TOKEN.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        } else if (authException instanceof BadCredentialsException && authException.getCause() == null) {
+            setResponseMap(result, "NONE", null, ErrorCode.INVALID_TOKEN.getMessage());
+            status = HttpStatus.UNAUTHORIZED;
+        } else if (authException.getCause() instanceof UsernameNotFoundException) {
+            setResponseMap(result, "FAIL", null, ErrorCode.USER_NOT_FOUND.getMessage());
+            status = HttpStatus.BAD_REQUEST;
+        } else {
             ErrorCode errorCode = request.getAttribute("exception") == null ?
                     ErrorCode.NOT_FOUND_END_POINT : (ErrorCode) request.getAttribute("exception");
-            responseDto = new ResponseDto(HttpStatus.BAD_REQUEST, "FAIL", null, errorCode.getMessage());
+            setResponseMap(result, "FAIL", null, errorCode.getMessage());
+            status = HttpStatus.BAD_REQUEST;
         }
 
+        sendResponse(response, result, status);
+        log.error("Authentication error: {}", authException.getMessage(), authException);
+    }
+
+    private void setResponseMap(Map<String, Object> map, String status, Object result, String message) {
+        map.put("status", status);
+        map.put("result", result);
+        map.put("message", message);
+    }
+
+    private void sendResponse(HttpServletResponse response, Map<String, Object> result, HttpStatus status) throws IOException {
+        response.setStatus(status.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.setStatus(responseDto.httpStatus().value());
-        response.getWriter().write(JSONValue.toJSONString(responseDto));
-        log.error("response = {}", responseDto);
-        log.error("error = {}", (Object) authException.getStackTrace());
+        response.getWriter().write(JSONValue.toJSONString(result));
     }
 }
+
