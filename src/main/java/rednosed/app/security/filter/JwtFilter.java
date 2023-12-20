@@ -38,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (isPathExcluded(request.getRequestURI())) {
+        if (isPathExcluded("/**")) {
             filterChain.doFilter(request, response);
             return;
         }
