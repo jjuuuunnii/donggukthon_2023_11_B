@@ -131,8 +131,8 @@ public class UserService {
 
     //3. 우표 만들기 전 공유하는 페이지(캔버스 id 돌려주기)
     @Transactional
-    public String makeNewCanvas(User tmpUser) {
-        User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
+    public String makeNewCanvas(String userId) {
+        User user = userRepository.findByUserClientId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         if (user.getCanvas() != null) {
             return user.getCanvas().getCanvasClientId();
