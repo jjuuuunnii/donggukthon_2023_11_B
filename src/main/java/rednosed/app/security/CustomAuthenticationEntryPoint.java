@@ -27,6 +27,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         Map<String, Object> result = new HashMap<>();
         HttpStatus status;
+        log.info("ERROR CAUSE = {} ", authException.getMessage());
         if (authException.getCause() instanceof InsufficientAuthenticationException) {
             log.error("FilterException throw MalformedJwtException Exception");
             setResponseMap(result,ErrorCode.TOKEN_MALFORMED_ERROR.getMessage());
