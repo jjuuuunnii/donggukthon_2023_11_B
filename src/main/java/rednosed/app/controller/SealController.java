@@ -39,7 +39,7 @@ public class SealController {
     @PostMapping("/new-seal")
     public ResponseDto<?> makeNewSeal(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @ModelAttribute SealNewDto sealNewDto
+            @RequestBody SealNewDto sealNewDto
             ) throws IOException {
         return ResponseDto.ok(sealService.makeNewSeal(principalDetails.getUser(), sealNewDto));
     }

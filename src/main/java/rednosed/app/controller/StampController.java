@@ -5,7 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import rednosed.app.dto.common.ResponseDto;
 import rednosed.app.dto.request.LikeDto;
-import rednosed.app.dto.request.StampNewDto;
+import rednosed.app.dto.request.StampNameDto;
 import rednosed.app.security.oauth.info.PrincipalDetails;
 import rednosed.app.service.StampService;
 
@@ -39,9 +39,9 @@ public class StampController {
     @PostMapping("/new-stamp")
     public ResponseDto<?> makeNewStamp(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @ModelAttribute StampNewDto stampNewDto
+            @RequestBody StampNameDto stampNameDto
     ) throws IOException {
-        return ResponseDto.ok(stampService.makeNewStamp(principalDetails.getUser(), stampNewDto));
+        return ResponseDto.ok(stampService.makeNewStamp(principalDetails.getUser(), stampNameDto));
     }
 
     //3-6. 우표 이름, 사진 요청

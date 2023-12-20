@@ -43,9 +43,9 @@ public class GCSUtil {
         String objectName;
 
         if (type.equals(Constants.T_STAMP)) {
-            objectName = UUID.randomUUID() + "_STAMP" + ".jpg";
+            objectName = UUID.randomUUID() + "_STAMP" + ".png";
         } else {
-            objectName = UUID.randomUUID() + "_SEAL" + ".jpg";
+            objectName = UUID.randomUUID() + "_SEAL" + ".png";
         }
 
         BlobId blobId = BlobId.of(BUCKET_NAME, objectName);

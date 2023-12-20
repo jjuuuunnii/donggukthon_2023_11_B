@@ -5,9 +5,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rednosed.app.contrant.Constants;
+import rednosed.app.domain.nosql.Pixel;
 import rednosed.app.domain.rds.*;
 import rednosed.app.dto.request.LikeDto;
-import rednosed.app.dto.request.StampNewDto;
+import rednosed.app.dto.request.StampNameDto;
 import rednosed.app.dto.response.*;
 import rednosed.app.dto.type.ErrorCode;
 import rednosed.app.event.LoadingEvent;
@@ -16,11 +17,18 @@ import rednosed.app.repository.nosql.PixelRepository;
 import rednosed.app.repository.rds.*;
 import rednosed.app.util.GCSUtil;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
+
+import static rednosed.app.contrant.Constants.PIXEL_SIZE;
 
 @Service
 @RequiredArgsConstructor
@@ -67,16 +75,22 @@ public class StampService {
 
     //3-5. 우표 만들기(만들기 버튼을 누르고 파일이 넘어올 떄)
     @Transactional
-    public StampIdDto makeNewStamp(User tmpUser, StampNewDto stampNewDto) throws IOException {
+    public StampIdDto makeNewStamp(User tmpUser, StampNameDto stampNameDto) throws IOException {
 
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        String stampFullPath = gcsUtil.saveFileImageToGCS(stampNewDto.stamp(), Constants.T_STAMP);
+        Pixel pixel = pixelRepository.findByCanvasClientId(user.getCanvas().getCanvasClientId())
+                .orElseThrow(() -> new CustomException(ErrorCode.CANVAS_NOT_FOUND));
+
+        String stampClientId = UUID.randomUUID().toString();
+
+        File stampImageFile = createImageFromPixels(pixel.getColors(), stampClientId);
+        String stampFullPath = gcsUtil.saveFileImageToGCS(stampImageFile, Constants.T_STAMP);
 
         Stamp stamp = Stamp.builder()
-                .stampClientId(UUID.randomUUID().toString())
-                .stampName(stampNewDto.name())
+                .stampClientId(stampClientId)
+                .stampName(stampNameDto.stampName())
                 .stampImgUrl(stampFullPath)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -108,7 +122,30 @@ public class StampService {
                 .stampId(stamp.getStampClientId())
                 .build();
     }
+    private File createImageFromPixels(List<List<String>> colors, String stampClientId) throws IOException {
+        int width = colors.size() * PIXEL_SIZE;
+        int height = colors.get(0).size() * PIXEL_SIZE;
 
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics = image.createGraphics();
+
+        for (int x = 0; x < colors.size(); x++) {
+            for (int y = 0; y < colors.get(x).size(); y++) {
+                String colorCode = colors.get(x).get(y);
+                if (colorCode != null) {
+                    Color color = Color.decode(colorCode);
+                    graphics.setColor(color);
+                    graphics.fillRect(x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+                }
+            }
+        }
+
+        graphics.dispose();
+        File outputFile = new File(stampClientId + ".png");
+        ImageIO.write(image, "png", outputFile);
+
+        return outputFile;
+    }
 
     //3-6. 우표 이름, 사진 요청
     @Transactional(readOnly = true)

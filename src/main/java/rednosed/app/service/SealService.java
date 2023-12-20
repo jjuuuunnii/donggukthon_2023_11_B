@@ -15,6 +15,10 @@ import rednosed.app.repository.rds.SealRepository;
 import rednosed.app.repository.rds.UserRepository;
 import rednosed.app.util.GCSUtil;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -64,10 +68,12 @@ public class SealService {
     public SealIdDto makeNewSeal(User tmpUser, SealNewDto sealNewDto) throws IOException {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        String sealFullPath = gcsUtil.saveFileImageToGCS(sealNewDto.seal(), Constants.T_SEAL);
+        String sealClientId = UUID.randomUUID().toString();
+        File sealFile = convertBase64ToImage(sealNewDto.sealImg(), sealClientId);
+        String sealFullPath = gcsUtil.saveFileImageToGCS(sealFile, Constants.T_SEAL);
         Seal seal = Seal.builder()
-                .sealClientId(UUID.randomUUID().toString())
-                .sealName(sealNewDto.name())
+                .sealClientId(sealClientId)
+                .sealName(sealNewDto.sealName())
                 .sealImgUrl(sealFullPath)
                 .user(user)
                 .createdAt(LocalDateTime.now())
@@ -79,6 +85,22 @@ public class SealService {
         return SealIdDto.builder()
                 .sealId(seal.getSealClientId())
                 .build();
+    }
+
+    private File convertBase64ToImage(String base64String, String sealClientId) throws IOException {
+        // Base64 문자열에서 데이터 부분만 추출 (헤더 제거)
+        String base64Image = base64String.split(",")[1];
+
+        // Base64 문자열을 바이트 배열로 디코딩
+        byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+
+        // 바이트 배열을 BufferedImage로 변환
+        BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
+
+        File outputFile = new File(sealClientId);
+        ImageIO.write(image, "png", outputFile);
+
+        return outputFile;
     }
 
     //5. 씰 게시판
