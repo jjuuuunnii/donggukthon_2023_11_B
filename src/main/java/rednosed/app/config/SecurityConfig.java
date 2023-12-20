@@ -30,7 +30,6 @@ public class SecurityConfig {
     private final OAuth2UserService oAuth2UserService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final JwtFilter jwtFilter;
-    private final JwtExceptionFilter jwtExceptionFilter;
 
 
     @Bean
@@ -67,7 +66,6 @@ public class SecurityConfig {
 
         http
                 .addFilterBefore(jwtFilter, LogoutFilter.class)
-                .addFilterBefore(jwtExceptionFilter, JwtFilter.class);
 
 
 
