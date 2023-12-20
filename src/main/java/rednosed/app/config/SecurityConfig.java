@@ -65,7 +65,7 @@ public class SecurityConfig {
                 .exceptionHandling(config -> config.authenticationEntryPoint(customAuthenticationEntryPoint));
 
         http
-                .addFilterBefore(jwtFilter, LogoutFilter.class)
+                .addFilterBefore(jwtFilter, LogoutFilter.class);
 
 
 
