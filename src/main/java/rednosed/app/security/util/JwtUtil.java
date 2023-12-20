@@ -83,6 +83,7 @@ public class JwtUtil {
 
     public String extractUserClientId(String accessToken) {
         try {
+            log.info("{}", accessToken);
             return JWT.require(Algorithm.HMAC512(secretKey))
                     .build()
                     .verify(accessToken)
