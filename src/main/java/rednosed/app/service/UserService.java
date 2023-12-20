@@ -141,7 +141,6 @@ public class UserService {
                 .build();
         user.updateCanvas(canvas);
         canvasRepository.save(canvas);
-        canvasRepository.flush();
 
         return canvas.getCanvasClientId();
     }

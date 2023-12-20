@@ -80,7 +80,6 @@ public class SealService {
                 .build();
 
         sealRepository.save(seal);
-        sealRepository.flush();
 
         return SealIdDto.builder()
                 .sealId(seal.getSealClientId())

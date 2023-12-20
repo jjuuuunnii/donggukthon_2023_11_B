@@ -95,7 +95,6 @@ public class StampService {
                 .createdAt(LocalDateTime.now())
                 .build();
         stampRepository.save(stamp);
-        stampRepository.flush();
 
         UserStamp userStamp = UserStamp.builder()
                 .user(user)
@@ -113,7 +112,7 @@ public class StampService {
                 canvasUser.updateCanvas(null);
                 userRepository.save(canvasUser);
             }
-            userRepository.flush();
+//            userRepository.flush();
             canvasRepository.delete(canvas);
             pixelRepository.deleteAllByCanvasClientId(canvas.getCanvasClientId());
         });
