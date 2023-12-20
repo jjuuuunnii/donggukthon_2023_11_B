@@ -12,7 +12,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.filter.CorsFilter;
 import rednosed.app.security.CustomAuthenticationEntryPoint;
-import rednosed.app.security.filter.JwtExceptionFilter;
 import rednosed.app.security.filter.JwtFilter;
 import rednosed.app.security.handler.OAuth2LoginFailureHandler;
 import rednosed.app.security.handler.OAuth2LoginSuccessHandler;
