@@ -22,7 +22,7 @@ public class CorsConfig {
         configuration.addAllowedMethod("HEAD");
         configuration.addAllowedMethod("OPTION");
         configuration.setAllowCredentials(true);
-        configuration.addAllowedHeader("*");
+//        configuration.addAllowedHeader("*");
         configuration.addExposedHeader("authorization");
         configuration.addExposedHeader("reauthorization");
 
