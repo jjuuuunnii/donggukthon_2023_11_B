@@ -134,6 +134,9 @@ public class UserService {
     public String makeNewCanvas(User tmpUser) {
         User user = userRepository.findByUserClientId(tmpUser.getUserClientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        if (user.getCanvas() != null) {
+            return user.getCanvas().getCanvasClientId();
+        }
         Canvas canvas = Canvas.builder()
                 .canvasClientId(UUID.randomUUID().toString())
                 .roomMaker(user)

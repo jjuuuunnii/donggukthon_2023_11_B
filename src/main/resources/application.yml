@@ -7,7 +7,7 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://mongo-admin:mongo-admin@mongodb:27017/redNoseDataBase
+      uri: mongodb://mongo-admin:mongo-admin@mongodb:27017/redNoseDataBase?authSource=admin
 
   servlet:
     multipart:
