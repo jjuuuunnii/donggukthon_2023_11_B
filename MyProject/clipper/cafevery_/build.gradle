@@ -1,0 +1,74 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.2'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+	// CSV
+	implementation 'org.apache.commons:commons-csv:1.8'
+
+	//selenium
+	implementation 'org.seleniumhq.selenium:selenium-java:4.17.0'
+	implementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.17.0'
+	implementation 'io.github.bonigarcia:webdrivermanager:5.6.3' // 버전은 최신으로 확인하세요
+
+
+	// Security
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	// Webflux
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.apache.httpcomponents.client5:httpclient5:5.3'
+
+	// Database
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	//query에서 ?의 내용을 보기 위한 라이브러리
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
+
+	// Validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// Test
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
